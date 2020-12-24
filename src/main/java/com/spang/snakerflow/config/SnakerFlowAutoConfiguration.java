@@ -1,6 +1,7 @@
 package com.spang.snakerflow.config;
 
 import com.spang.snakerflow.cache.SnakerRedisCacheManager;
+import com.spang.snakerflow.engine.SpelExpression;
 import com.spang.snakerflow.engine.SpringConfiguration;
 import com.spang.snakerflow.engine.SpringJdbcAccess;
 import com.spang.snakerflow.engine.SpringSnakerEngine;
@@ -10,6 +11,7 @@ import org.snaker.engine.*;
 import org.snaker.engine.cache.CacheManager;
 import org.snaker.engine.cache.memory.MemoryCacheManager;
 import org.snaker.engine.core.*;
+import org.snaker.engine.impl.LogInterceptor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -35,7 +37,7 @@ import javax.sql.DataSource;
 @Slf4j
 @Order
 @Configuration
-@ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class })
+@ConditionalOnClass({DataSource.class, EmbeddedDatabaseType.class})
 @AutoConfigureAfter({DataSourceAutoConfiguration.class, RedisAutoConfiguration.class})
 @EnableConfigurationProperties({SnakerFlowProperties.class})
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -76,6 +78,16 @@ public class SnakerFlowAutoConfiguration {
     }
 
     @Bean
+    public LogInterceptor logInterceptor() {
+        return new LogInterceptor();
+    }
+
+    @Bean
+    public SpelExpression spelExpression() {
+        return new SpelExpression();
+    }
+
+    @Bean
     @ConditionalOnMissingBean
     public IManagerService managerService(DBAccess dbAccess) {
         ManagerService managerService = new ManagerService();
@@ -84,7 +96,7 @@ public class SnakerFlowAutoConfiguration {
     }
 
     @Bean("memoryCacheManager")
-    @ConditionalOnProperty(prefix = "snaker.flow", name = "cache-type",havingValue = "memory",matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "snaker.flow", name = "cache-type", havingValue = "memory", matchIfMissing = true)
     public CacheManager memoryCacheManager() {
         log.info("获取到缓存使用类型: memory");
         return new MemoryCacheManager();
@@ -106,6 +118,7 @@ public class SnakerFlowAutoConfiguration {
         queryService.setAccess(dbAccess);
         return queryService;
     }
+
     @Bean
     @ConditionalOnProperty(prefix = "snaker.flow", name = "db-access-type", havingValue = "spring")
     public DBAccess dbAccess(DataSource dataSource,

@@ -26,7 +26,6 @@ public class SnakerRedisCacheManager<K, V> implements CacheManager {
         this.redisTemplate = redisTemplate;
     }
 
-
     @Override
     public <K, V> Cache<K, V> getCache(String name) throws CacheException {
         if(StringHelper.isEmpty(name)) {
