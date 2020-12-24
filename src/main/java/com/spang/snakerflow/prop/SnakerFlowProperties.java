@@ -1,17 +1,20 @@
 package com.spang.snakerflow.prop;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author zhao.cheng
  * @date 2020/11/25 9:12
  */
+@Data
 @ConfigurationProperties("snaker.flow")
 public class SnakerFlowProperties {
 
-
-    private DbAccessType dbAccessType = DbAccessType.MYBATIS;
-
+    /**
+     * 是否初始化数据库
+     */
+    private boolean autoInitSchema = Boolean.FALSE;
     /**
      * 是否开启事务
      */
@@ -22,32 +25,13 @@ public class SnakerFlowProperties {
      */
     private CacheType cacheType = CacheType.MEMORY;
 
+    /**
+     * 数据库连接类型
+     */
+    private DbAccessType dbAccessType = DbAccessType.MYBATIS;
 
-    public CacheType getCacheType() {
-        return cacheType;
-    }
 
-    public void setCacheType(CacheType cacheType) {
-        this.cacheType = cacheType;
-    }
-
-    public boolean isTransactionEnabled() {
-        return transactionEnabled;
-    }
-
-    public void setTransactionEnabled(boolean transactionEnabled) {
-        this.transactionEnabled = transactionEnabled;
-    }
-
-    public DbAccessType getDbAccessType() {
-        return dbAccessType;
-    }
-
-    public void setDbAccessType(DbAccessType dbAccessType) {
-        this.dbAccessType = dbAccessType;
-    }
-
-    public enum DbAccessType {
+    private enum DbAccessType {
 
         /**
          * mybatis
@@ -60,7 +44,7 @@ public class SnakerFlowProperties {
         SPRING
     }
 
-    public enum CacheType{
+    public enum CacheType {
         /**
          * redis
          */

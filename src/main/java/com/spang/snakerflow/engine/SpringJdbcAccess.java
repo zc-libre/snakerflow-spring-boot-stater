@@ -14,10 +14,15 @@
  */
 package com.spang.snakerflow.engine;
 
+import com.spang.snakerflow.prop.SnakerFlowProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.snaker.engine.DBAccess;
+import org.snaker.engine.SnakerException;
 import org.snaker.engine.access.AbstractDBAccess;
+import org.snaker.engine.access.ScriptRunner;
+import org.snaker.engine.access.jdbc.JdbcHelper;
 import org.snaker.engine.entity.Process;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -40,11 +45,16 @@ import java.util.Map;
  * @author yuqs
  * @since 1.0
  */
+@Slf4j
 public class SpringJdbcAccess extends AbstractDBAccess implements DBAccess {
 
-	private static final Logger log = LoggerFactory.getLogger(SpringJdbcAccess.class);
 	private LobHandler lobHandler;
 	private JdbcTemplate template;
+	private final SnakerFlowProperties snakerFlowProperties;
+
+	public SpringJdbcAccess(SnakerFlowProperties snakerFlowProperties) {
+		this.snakerFlowProperties = snakerFlowProperties;
+	}
 
 	@Override
 	public void saveProcess(final Process process) {
@@ -155,4 +165,31 @@ public class SpringJdbcAccess extends AbstractDBAccess implements DBAccess {
 	protected Connection getConnection() throws SQLException {
         return getDataSource().getConnection();
     }
+
+	@Override
+	public void runScript() {
+		if (!snakerFlowProperties.isAutoInitSchema()) {
+			return;
+		}
+		Connection conn = null;
+		try {
+			conn = getConnection();
+			if(JdbcHelper.isExec(conn)) {
+				log.info("script has completed execution.skip this step");
+				return;
+			}
+			String databaseType = JdbcHelper.getDatabaseType(conn);
+			String schema = "db/schema-" + databaseType + ".sql";
+			ScriptRunner runner = new ScriptRunner(conn, true);
+			runner.runScript(schema);
+		} catch (Exception e) {
+			throw new SnakerException(e);
+		} finally {
+			try {
+				JdbcHelper.close(conn);
+			} catch (SQLException e) {
+				//ignore
+			}
+		}
+	}
 }

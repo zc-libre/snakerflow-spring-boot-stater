@@ -1,15 +1,22 @@
 package com.spang.snakerflow.config;
 
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
+import com.spang.snakerflow.transaction.MybatisTransactionFactory;
+import org.apache.ibatis.transaction.TransactionFactory;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -24,11 +31,12 @@ import java.util.Map;
  * @author zhao.cheng
  * @date 2020/11/25 8:50
  */
-@Order
+
 @Configuration
+@ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class })
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
+@AutoConfigureBefore(MybatisPlusAutoConfiguration.class)
 @EnableTransactionManagement
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @ConditionalOnProperty(prefix = "snaker.flow", name = "transactionEnabled", matchIfMissing = true)
 public class TransactionManagerConfig {
 
@@ -36,8 +44,16 @@ public class TransactionManagerConfig {
 
 
     @Bean
+    @ConditionalOnMissingBean
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public TransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Primary
+    @Bean
+    public TransactionFactory transactionFactory() {
+        return new MybatisTransactionFactory();
     }
 
     @Bean
@@ -86,6 +102,7 @@ public class TransactionManagerConfig {
         source.setNameMap(txMap);
        return new TransactionInterceptor(transactionManager, source);
     }
+
     @Bean
     public Advisor txAdviceAdvisor(TransactionInterceptor txAdvice) {
         /* 声明切点的面：切面就是通知和切入点的结合。通知和切入点共同定义了关于切面的全部内容——它的功能、在何时和何地完成其功能* */

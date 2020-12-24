@@ -2,18 +2,20 @@ package com.spang.snakerflow.config;
 
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
+import com.baomidou.mybatisplus.core.MybatisSqlSessionFactoryBuilder;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.spang.snakerflow.mybaits.MybatisAccess;
-import org.apache.ibatis.plugin.Interceptor;
+import com.spang.snakerflow.prop.SnakerFlowProperties;
+import com.spang.snakerflow.transaction.MybatisTransactionFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.transaction.TransactionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.mybatis.spring.annotation.MapperScan;
 import org.snaker.engine.DBAccess;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -21,26 +23,27 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import javax.sql.DataSource;
 
 /**
  * @author zhao.cheng
  */
-
+@Slf4j
 @Configuration
 @ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class})
 @AutoConfigureAfter({DataSourceAutoConfiguration.class, MybatisPlusAutoConfiguration.class})
-@MapperScan("org.snaker.engine.entity")
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+@Import(MybatisPlusAutoConfiguration.class)
+@ConditionalOnProperty(prefix = "snaker.flow", name = "db-access-type", havingValue = "mybatis", matchIfMissing = true)
 public class SnakerMybatisAutoConfiguration implements BeanPostProcessor {
 
      private final static String TYPE_ALIASES_PACKAGE = "org.snaker.engine.entity";
 
     @Bean
-    @ConditionalOnProperty(prefix = "snaker.flow", name = "dbAccessType", matchIfMissing = true)
     public DBAccess dbAccess(SqlSessionTemplate sqlSessionTemplate,
                              SqlSessionFactory sqlSessionFactory) {
+        log.info("获取到数据库连接类型: mybatis");
+
         return new MybatisAccess(sqlSessionFactory, sqlSessionTemplate);
     }
 
@@ -55,6 +58,7 @@ public class SnakerMybatisAutoConfiguration implements BeanPostProcessor {
              }else {
                  packages = TYPE_ALIASES_PACKAGE;
              }
+             log.info("获取到扫描实体类路径 : {}", packages);
              properties.setTypeAliasesPackage(packages);
              return properties;
          }

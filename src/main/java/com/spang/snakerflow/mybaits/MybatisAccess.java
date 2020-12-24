@@ -16,10 +16,16 @@
  */
 package com.spang.snakerflow.mybaits;
 
+import com.spang.snakerflow.prop.SnakerFlowProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.snaker.engine.SnakerException;
+import org.snaker.engine.access.ScriptRunner;
 import org.snaker.engine.access.jdbc.JdbcAccess;
+import org.snaker.engine.access.jdbc.JdbcHelper;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -30,6 +36,7 @@ import java.sql.SQLException;
  * @author yuqs
  * @since 1.0
  */
+@Slf4j
 public class MybatisAccess extends JdbcAccess {
 	/**
 	 * mybatis的sqlSessionFactory
@@ -37,13 +44,14 @@ public class MybatisAccess extends JdbcAccess {
 	private SqlSessionFactory sqlSessionFactory;
 	private final SqlSessionTemplate sqlSessionTemplate;
 
-	public MybatisAccess(SqlSessionFactory sqlSessionFactory, SqlSessionTemplate sqlSessionTemplate) {
+	public MybatisAccess(SqlSessionFactory sqlSessionFactory,
+						 SqlSessionTemplate sqlSessionTemplate) {
 		this.sqlSessionFactory = sqlSessionFactory;
 		this.sqlSessionTemplate = sqlSessionTemplate;
 	}
 	/**
 	 * setter
-	 * @param sqlSessionFactory
+	 * @param sqlSessionFactory /
 	 */
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
 		this.sqlSessionFactory = sqlSessionFactory;
@@ -57,6 +65,7 @@ public class MybatisAccess extends JdbcAccess {
 		if(accessObject instanceof SqlSessionFactory) {
 			this.sqlSessionFactory = (SqlSessionFactory)accessObject;
 			setDataSource(this.sqlSessionFactory.getConfiguration().getEnvironment().getDataSource());
+
 		}
 	}
 
@@ -73,4 +82,5 @@ public class MybatisAccess extends JdbcAccess {
 	protected Connection getConnection() {
 		return getSession().getConnection();
 	}
+
 }
