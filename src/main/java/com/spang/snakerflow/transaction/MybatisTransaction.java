@@ -21,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.snaker.engine.access.transaction.TransactionObjectHolder;
 import org.snaker.engine.helper.AssertHelper;
+import org.springframework.jdbc.datasource.ConnectionHolder;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -84,6 +86,10 @@ public class MybatisTransaction implements Transaction {
 
 	@Override
 	public Integer getTimeout() throws SQLException {
+		ConnectionHolder holder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
+		if (holder != null && holder.hasTimeout()) {
+			return holder.getTimeToLiveInSeconds();
+		}
 		return null;
 	}
 }

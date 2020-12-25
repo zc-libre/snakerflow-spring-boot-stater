@@ -10,11 +10,9 @@ import org.springframework.context.annotation.Primary;
  * @author zhao.cheng
  * @date 2020/12/24 18:14
  */
-@Configuration
+
 public class MyBatisTransactionConfig {
 
-    @Primary
-    @Bean
     public TransactionFactory mybatisTransactionFactory() {
         return new MybatisTransactionFactory();
     }

@@ -78,11 +78,13 @@ public class SnakerFlowAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public LogInterceptor logInterceptor() {
         return new LogInterceptor();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public SpelExpression spelExpression() {
         return new SpelExpression();
     }

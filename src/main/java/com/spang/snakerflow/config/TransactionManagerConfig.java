@@ -4,6 +4,7 @@ import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -33,13 +34,14 @@ import java.util.Map;
 @ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class })
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 @EnableTransactionManagement(proxyTargetClass = true)
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class TransactionManagerConfig {
 
     private static final String AOP_POINTCUT_EXPRESSION = "execution(* org.snaker.engine.core..*.*(..))";
 
 
-
     @Bean
+    @ConditionalOnMissingBean
     public TransactionInterceptor txAdvice(TransactionManager transactionManager) {
         /*事务管理规则，声明具备事务管理的方法名**/
         NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
