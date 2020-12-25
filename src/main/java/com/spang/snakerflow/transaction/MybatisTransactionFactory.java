@@ -14,7 +14,7 @@ import java.util.Properties;
  * @author yuqs
  * @since 1.0
  */
-public class MybatisTransactionFactory implements TransactionFactory {
+public class MybatisTransactionFactory extends SpringManagedTransactionFactory {
 
 	@Override
 	public void setProperties(Properties props) {
