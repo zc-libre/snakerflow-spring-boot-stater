@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.spang.snakerflow.engine;
+package com.github.snakerflow.engine;
 
 import org.snaker.engine.Expression;
 import org.springframework.expression.EvaluationContext;

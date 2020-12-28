@@ -1,4 +1,4 @@
-package com.spang.snakerflow.prop;
+package com.github.snakerflow.prop;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

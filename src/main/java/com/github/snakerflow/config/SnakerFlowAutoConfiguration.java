@@ -1,12 +1,12 @@
-package com.spang.snakerflow.config;
+package com.github.snakerflow.config;
 
-import com.spang.snakerflow.cache.EhCacheManager;
-import com.spang.snakerflow.cache.SnakerRedisCacheManager;
-import com.spang.snakerflow.engine.SpelExpression;
-import com.spang.snakerflow.engine.SpringConfiguration;
-import com.spang.snakerflow.engine.SpringJdbcAccess;
-import com.spang.snakerflow.engine.SpringSnakerEngine;
-import com.spang.snakerflow.prop.SnakerFlowProperties;
+import com.github.snakerflow.cache.EhCacheManager;
+import com.github.snakerflow.cache.SnakerRedisCacheManager;
+import com.github.snakerflow.engine.SpelExpression;
+import com.github.snakerflow.engine.SpringConfiguration;
+import com.github.snakerflow.engine.SpringJdbcAccess;
+import com.github.snakerflow.engine.SpringSnakerEngine;
+import com.github.snakerflow.prop.SnakerFlowProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.snaker.engine.*;
 import org.snaker.engine.cache.CacheManager;
@@ -122,6 +122,7 @@ public class SnakerFlowAutoConfiguration {
         log.info("获取到缓存使用类型: redis");
         return new SnakerRedisCacheManager<>(redisTemplate);
     }
+
 
     @Bean("ehCacheManager")
     @ConditionalOnProperty(prefix = "snaker.flow", name = "cache-type", havingValue = "ehcache")

@@ -1,8 +1,7 @@
-package com.spang.snakerflow.transaction;
+package com.github.snakerflow.transaction;
 
 import org.apache.ibatis.session.TransactionIsolationLevel;
 import org.apache.ibatis.transaction.Transaction;
-import org.apache.ibatis.transaction.TransactionFactory;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
 
 import javax.sql.DataSource;

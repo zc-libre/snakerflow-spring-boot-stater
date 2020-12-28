@@ -1,11 +1,9 @@
-package com.spang.snakerflow.cache;
+package com.github.snakerflow.cache;
 
 import org.snaker.engine.cache.Cache;
 import org.snaker.engine.cache.CacheException;
 import org.snaker.engine.cache.CacheManager;
-import org.snaker.engine.cache.memory.MemoryCache;
 import org.snaker.engine.helper.StringHelper;
-import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.concurrent.ConcurrentHashMap;

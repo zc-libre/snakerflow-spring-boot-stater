@@ -14,7 +14,7 @@
  *  * limitations under the License.
  *
  */
-package com.spang.snakerflow.transaction;
+package com.github.snakerflow.transaction;
 
 import org.apache.ibatis.transaction.Transaction;
 import org.slf4j.Logger;

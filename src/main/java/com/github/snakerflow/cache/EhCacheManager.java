@@ -1,10 +1,8 @@
-package com.spang.snakerflow.cache;
+package com.github.snakerflow.cache;
 
 import java.io.InputStream;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.snaker.engine.cache.Cache;
 import org.snaker.engine.cache.CacheException;
 import org.snaker.engine.cache.CacheManager;

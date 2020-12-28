@@ -1,6 +1,6 @@
-package com.spang.snakerflow.config;
+package com.github.snakerflow.config;
 
-import com.spang.snakerflow.transaction.MybatisTransactionFactory;
+import com.github.snakerflow.transaction.MybatisTransactionFactory;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

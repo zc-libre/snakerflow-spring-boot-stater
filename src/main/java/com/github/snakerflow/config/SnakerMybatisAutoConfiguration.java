@@ -1,17 +1,12 @@
-package com.spang.snakerflow.config;
+package com.github.snakerflow.config;
 
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
-import com.baomidou.mybatisplus.core.MybatisSqlSessionFactoryBuilder;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.spang.snakerflow.mybaits.MybatisAccess;
-import com.spang.snakerflow.prop.SnakerFlowProperties;
-import com.spang.snakerflow.transaction.MybatisTransactionFactory;
+import com.github.snakerflow.mybaits.MybatisAccess;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.transaction.TransactionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.snaker.engine.DBAccess;

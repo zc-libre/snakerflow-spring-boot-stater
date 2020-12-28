@@ -1,4 +1,4 @@
-package com.spang.snakerflow.cache;
+package com.github.snakerflow.cache;
 
 import org.snaker.engine.cache.Cache;
 import org.snaker.engine.cache.CacheException;

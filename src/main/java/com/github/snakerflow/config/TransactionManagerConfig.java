@@ -1,4 +1,4 @@
-package com.spang.snakerflow.config;
+package com.github.snakerflow.config;
 
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
