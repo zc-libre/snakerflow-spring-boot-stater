@@ -11,6 +11,7 @@ import org.snaker.engine.*;
 import org.snaker.engine.cache.CacheManager;
 import org.snaker.engine.cache.memory.MemoryCacheManager;
 import org.snaker.engine.core.*;
+import org.snaker.engine.impl.JuelExpression;
 import org.snaker.engine.impl.LogInterceptor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -54,6 +55,18 @@ public class SnakerFlowAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    public JuelExpression juelExpression() {
+        return new JuelExpression();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SpelExpression spelExpression() {
+        return new SpelExpression();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public IProcessService processService(DBAccess dbAccess, CacheManager cacheManager) {
         ProcessService processService = new ProcessService();
         processService.setAccess(dbAccess);
@@ -83,11 +96,7 @@ public class SnakerFlowAutoConfiguration {
         return new LogInterceptor();
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public SpelExpression spelExpression() {
-        return new SpelExpression();
-    }
+
 
     @Bean
     @ConditionalOnMissingBean

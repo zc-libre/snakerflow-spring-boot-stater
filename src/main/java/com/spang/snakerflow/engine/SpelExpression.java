@@ -29,14 +29,19 @@ import java.util.Map.Entry;
  * @since 1.2.2
  */
 public class SpelExpression implements Expression {
-	ExpressionParser parser = new SpelExpressionParser();
 
 	@Override
 	public <T> T eval(Class<T> T, String expr, Map<String, Object> args) {
+		ExpressionParser parser = new SpelExpressionParser();
 		EvaluationContext context = new StandardEvaluationContext();
 		for(Entry<String, Object> entry : args.entrySet()) {
 			context.setVariable(entry.getKey(), entry.getValue());
 		}
+		org.springframework.expression.Expression expression = parser.parseExpression(expr);
+		Object value = expression.getValue();
+		System.out.println(value);
 		return parser.parseExpression(expr).getValue(context, T);
 	}
+
+
 }
