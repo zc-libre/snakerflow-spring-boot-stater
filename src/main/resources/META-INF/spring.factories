@@ -2,4 +2,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.github.snakerflow.config.SnakerFlowAutoConfiguration,\
 com.github.snakerflow.config.SnakerMybatisAutoConfiguration,\
 com.github.snakerflow.config.TransactionManagerConfig,\
-com.github.snakerflow.config.MyBatisTransactionConfig
+com.github.snakerflow.config.MyBatisTransactionConfig,\
+com.github.snakerflow.config.ExpressionAutoConfiguration

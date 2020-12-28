@@ -54,17 +54,7 @@ public class SnakerFlowAutoConfiguration {
         return snakerEngine;
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public JuelExpression juelExpression() {
-        return new JuelExpression();
-    }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public SpelExpression spelExpression() {
-        return new SpelExpression();
-    }
 
     @Bean
     @ConditionalOnMissingBean

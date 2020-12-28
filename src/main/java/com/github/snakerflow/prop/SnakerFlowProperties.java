@@ -30,8 +30,23 @@ public class SnakerFlowProperties {
      */
     private DbAccessType dbAccessType = DbAccessType.MYBATIS;
 
+    /**
+     * 决策表达式类型
+     */
+    private ExpressionType expressionType = ExpressionType.JUEL;
 
-    private enum DbAccessType {
+    public enum ExpressionType {
+        /**
+         * spel表达式
+         */
+        SPEL,
+
+        /**
+         * el表达式
+         */
+        JUEL;
+    }
+    public enum DbAccessType {
 
         /**
          * mybatis
