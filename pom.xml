@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.spang</groupId>
+    <groupId>com.github.snakerflow</groupId>
     <artifactId>snakerflow-spring-boot-stater</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
     <name>snakerflow-spring-boot-stater</name>
     <description>Demo project for Spring Boot</description>
 
