@@ -1,5 +1,6 @@
 package com.spang.snakerflow.config;
 
+import com.spang.snakerflow.cache.EhCacheManager;
 import com.spang.snakerflow.cache.SnakerRedisCacheManager;
 import com.spang.snakerflow.engine.SpelExpression;
 import com.spang.snakerflow.engine.SpringConfiguration;
@@ -120,6 +121,13 @@ public class SnakerFlowAutoConfiguration {
     public CacheManager redisCacheManager(RedisTemplate<String, Object> redisTemplate) {
         log.info("获取到缓存使用类型: redis");
         return new SnakerRedisCacheManager<>(redisTemplate);
+    }
+
+    @Bean("ehCacheManager")
+    @ConditionalOnProperty(prefix = "snaker.flow", name = "cache-type", havingValue = "ehcache")
+    public CacheManager ehCacheManager() {
+        log.info("获取到缓存使用类型: ehcache");
+        return new EhCacheManager();
     }
 
     @Bean

@@ -53,6 +53,11 @@ public class SnakerFlowProperties {
         /**
          * 内存
          */
-        MEMORY
+        MEMORY,
+
+        /**
+         * ehcache
+         */
+        EHCACHE;
     }
 }
