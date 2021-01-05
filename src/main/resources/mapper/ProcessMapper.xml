@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.snakerflow.mybatis.mapper.ProcessMapper">
+  <resultMap id="BaseResultMap" type="com.github.snakerflow.mybatis.entity.ProcessEntity">
+    <!--@mbg.generated-->
+    <!--@Table wf_process-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="display_Name" jdbcType="VARCHAR" property="displayName" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="instance_Url" jdbcType="VARCHAR" property="instanceUrl" />
+    <result column="state" jdbcType="BOOLEAN" property="state" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="create_Time" jdbcType="VARCHAR" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.github.snakerflow.mybatis.entity.ProcessEntity">
+    <!--@mbg.generated-->
+    <!--@Table wf_process-->
+    <result column="content" jdbcType="BLOB" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, display_Name, `type`, instance_Url, `state`, version, create_Time, creator
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--@mbg.generated-->
+    content
+  </sql>
+</mapper>

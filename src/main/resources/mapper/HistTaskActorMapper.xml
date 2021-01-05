@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.snakerflow.mybatis.mapper.HistTaskActorMapper">
+  <resultMap id="BaseResultMap" type="com.github.snakerflow.mybatis.entity.HistTaskActorEntity">
+    <!--@mbg.generated-->
+    <!--@Table wf_hist_task_actor-->
+    <result column="task_Id" jdbcType="VARCHAR" property="taskId" />
+    <result column="actor_Id" jdbcType="VARCHAR" property="actorId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    task_Id, actor_Id
+  </sql>
+</mapper>

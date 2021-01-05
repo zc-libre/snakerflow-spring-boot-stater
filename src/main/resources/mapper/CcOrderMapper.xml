@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.snakerflow.mybatis.mapper.CcOrderMapper">
+  <resultMap id="BaseResultMap" type="com.github.snakerflow.mybatis.entity.CcOrderEntity">
+    <!--@mbg.generated-->
+    <!--@Table wf_cc_order-->
+    <result column="order_Id" jdbcType="VARCHAR" property="orderId" />
+    <result column="actor_Id" jdbcType="VARCHAR" property="actorId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_Time" jdbcType="VARCHAR" property="createTime" />
+    <result column="finish_Time" jdbcType="VARCHAR" property="finishTime" />
+    <result column="status" jdbcType="BOOLEAN" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    order_Id, actor_Id, creator, create_Time, finish_Time, `status`
+  </sql>
+</mapper>

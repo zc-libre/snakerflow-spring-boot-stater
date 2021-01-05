@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.snakerflow.mybatis.mapper.TaskMapper">
+  <resultMap id="BaseResultMap" type="com.github.snakerflow.mybatis.entity.TaskEntity">
+    <!--@mbg.generated-->
+    <!--@Table wf_task-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="order_Id" jdbcType="VARCHAR" property="orderId" />
+    <result column="task_Name" jdbcType="VARCHAR" property="taskName" />
+    <result column="display_Name" jdbcType="VARCHAR" property="displayName" />
+    <result column="task_Type" jdbcType="BOOLEAN" property="taskType" />
+    <result column="perform_Type" jdbcType="BOOLEAN" property="performType" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="create_Time" jdbcType="VARCHAR" property="createTime" />
+    <result column="finish_Time" jdbcType="VARCHAR" property="finishTime" />
+    <result column="expire_Time" jdbcType="VARCHAR" property="expireTime" />
+    <result column="action_Url" jdbcType="VARCHAR" property="actionUrl" />
+    <result column="parent_Task_Id" jdbcType="VARCHAR" property="parentTaskId" />
+    <result column="variable" jdbcType="VARCHAR" property="variable" />
+    <result column="version" jdbcType="BOOLEAN" property="version" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, order_Id, task_Name, display_Name, task_Type, perform_Type, `operator`, create_Time,
+    finish_Time, expire_Time, action_Url, parent_Task_Id, `variable`, version
+  </sql>
+</mapper>
