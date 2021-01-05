@@ -1,4 +1,4 @@
-package com.github.snakerflow.mybaits;
+package com.github.snakerflow.mybatis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;

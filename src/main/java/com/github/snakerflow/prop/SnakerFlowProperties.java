@@ -56,7 +56,9 @@ public class SnakerFlowProperties {
         /**
          * spring
          */
-        SPRING
+        SPRING,
+
+        MYBATIS_PLUS
     }
 
     public enum CacheType {
