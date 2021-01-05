@@ -11,6 +11,7 @@ import org.snaker.engine.access.Page;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.*;
 import org.snaker.engine.entity.Process;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,65 +38,76 @@ public class MybatisPlusAccess implements DBAccess {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveTask(Task task) {
         TaskEntity taskEntity = entityConvert.toTaskEntity(task);
         snakerTaskService.saveOrUpdate(taskEntity);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveOrder(Order order) {
         OrderEntity orderEntity = entityConvert.toOrderEntity(order);
         snakerOrderService.saveOrUpdate(orderEntity);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveCCOrder(CCOrder ccOrder) {
         CcOrderEntity ccOrderEntity = entityConvert.toCcOrderEntity(ccOrder);
         snakerCcOrderService.saveOrUpdate(ccOrderEntity);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveProcess(Process process) {
         ProcessEntity processEntity = entityConvert.toProcessEntity(process);
         snakerProcessService.saveOrUpdate(processEntity);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveTaskActor(TaskActor taskActor) {
         TaskActorEntity taskActorEntity = entityConvert.toTaskActorEntity(taskActor);
         snakerTaskActorService.saveOrUpdate(taskActorEntity);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateTask(Task task) {
         TaskEntity taskEntity = entityConvert.toTaskEntity(task);
         snakerTaskService.saveOrUpdate(taskEntity);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateOrder(Order order) {
         OrderEntity orderEntity = entityConvert.toOrderEntity(order);
         snakerOrderService.saveOrUpdate(orderEntity);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateCCOrder(CCOrder ccOrder) {
         CcOrderEntity ccOrderEntity = entityConvert.toCcOrderEntity(ccOrder);
         snakerCcOrderService.saveOrUpdate(ccOrderEntity);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateProcess(Process process) {
         ProcessEntity processEntity = entityConvert.toProcessEntity(process);
         snakerProcessService.saveOrUpdate(processEntity);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteProcess(Process process) {
         snakerProcessService.removeById(process.getId());
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateProcessType(String id, String type) {
         snakerProcessService.update(Wrappers.<ProcessEntity>lambdaUpdate()
                 .set(ProcessEntity::getType, type)
@@ -103,6 +115,7 @@ public class MybatisPlusAccess implements DBAccess {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteTask(Task task) {
         snakerTaskActorService.remove(Wrappers.<TaskActorEntity>lambdaUpdate()
                 .eq(TaskActorEntity::getTaskId, task.getId()));
@@ -110,6 +123,7 @@ public class MybatisPlusAccess implements DBAccess {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteOrder(Order order) {
        snakerOrderService.removeById(order.getId());
     }
@@ -122,6 +136,7 @@ public class MybatisPlusAccess implements DBAccess {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void removeTaskActor(String taskId, String... actors) {
         for (String actorId : actors) {
             snakerTaskActorService.remove(Wrappers.<TaskActorEntity>lambdaUpdate()
@@ -131,46 +146,55 @@ public class MybatisPlusAccess implements DBAccess {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveHistory(HistoryOrder historyOrder) {
 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateHistory(HistoryOrder historyOrder) {
 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveHistory(HistoryTask historyTask) {
 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteHistoryOrder(HistoryOrder historyOrder) {
 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteHistoryTask(HistoryTask historyTask) {
 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateOrderVariable(Order order) {
 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveSurrogate(Surrogate surrogate) {
 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateSurrogate(Surrogate surrogate) {
 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteSurrogate(Surrogate surrogate) {
 
     }
@@ -236,8 +260,9 @@ public class MybatisPlusAccess implements DBAccess {
     }
 
     @Override
-    public Integer getLatestProcessVersion(String s) {
-        return null;
+    public Integer getLatestProcessVersion(String name) {
+        return snakerProcessService.findLatestProcessVersionByName(name);
+
     }
 
     @Override
