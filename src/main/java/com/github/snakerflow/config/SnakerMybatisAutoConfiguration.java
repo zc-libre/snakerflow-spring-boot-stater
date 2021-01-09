@@ -1,5 +1,8 @@
 package com.github.snakerflow.config;
 
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.github.snakerflow.mybatis.MybatisAccess;
 import com.github.snakerflow.mybatis.MybatisPlusAccess;
 import com.github.snakerflow.mybatis.service.*;
@@ -60,6 +63,9 @@ public class SnakerMybatisAutoConfiguration {
         access.setEntityConvert(EntityConvert.INSTANCE);
         return access;
     }
+
+
+
 
     @Bean
     public SnakerProcessService snakerProcessService() {

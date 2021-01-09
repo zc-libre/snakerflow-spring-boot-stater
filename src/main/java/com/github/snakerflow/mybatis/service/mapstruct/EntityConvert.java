@@ -1,8 +1,12 @@
 package com.github.snakerflow.mybatis.service.mapstruct;
 
 import com.github.snakerflow.mybatis.entity.*;
+import com.github.snakerflow.util.MpPage;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
+import org.snaker.engine.access.Page;
 import org.snaker.engine.entity.*;
 import org.snaker.engine.entity.Process;
 
@@ -74,5 +78,17 @@ public interface EntityConvert {
      * @return /
      */
     SurrogateEntity toSurrogateEntity(Surrogate surrogate);
+
+    /**
+     * Page ===> MpPage
+     * @param page /
+     * @param <T> /
+     * @return /
+     */
+    @Mapping(source = "pageNo", target = "current")
+    @Mapping(source = "pageSize", target = "size")
+    @Mapping(source = "totalCount", target = "total")
+    @Mapping(source = "result", target = "records")
+    MpPage<Surrogate> toSurrogateMpPage(Page<Surrogate> page);
 
 }

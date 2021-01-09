@@ -1,11 +1,18 @@
 package com.github.snakerflow.mybatis;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.snakerflow.mybatis.entity.*;
 import com.github.snakerflow.mybatis.service.*;
 import com.github.snakerflow.mybatis.service.mapstruct.EntityConvert;
+import com.github.snakerflow.util.MpPage;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.snaker.engine.DBAccess;
 import org.snaker.engine.access.Page;
 import org.snaker.engine.access.QueryFilter;
@@ -18,8 +25,10 @@ import java.util.List;
 /**
  * @author zhaocheng
  */
+@Slf4j
 @Setter
 @Getter
+@SuppressWarnings("unchecked")
 public class MybatisPlusAccess implements DBAccess {
 
     private SnakerProcessService snakerProcessService;
@@ -30,6 +39,7 @@ public class MybatisPlusAccess implements DBAccess {
     private SnakerTaskActorService snakerTaskActorService;
     private SnakerHistTaskService snakerHistTaskService;
     private SnakerSurrogateService snakerSurrogateService;
+    private SnakerHistTaskActorService histTaskActorService;
     private EntityConvert entityConvert;
 
     @Override
@@ -148,66 +158,90 @@ public class MybatisPlusAccess implements DBAccess {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveHistory(HistoryOrder historyOrder) {
+        HistOrderEntity histOrderEntity = entityConvert.toHistOrderEntity(historyOrder);
+        snakerHistOrderService.saveOrUpdate(histOrderEntity);
 
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateHistory(HistoryOrder historyOrder) {
-
+        HistOrderEntity histOrderEntity = entityConvert.toHistOrderEntity(historyOrder);
+        snakerHistOrderService.updateById(histOrderEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveHistory(HistoryTask historyTask) {
-
+        HistTaskEntity histTaskEntity = entityConvert.toHistTaskEntity(historyTask);
+        snakerHistTaskService.saveOrUpdate(histTaskEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteHistoryOrder(HistoryOrder historyOrder) {
-
+        snakerHistOrderService.removeById(historyOrder.getId());
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteHistoryTask(HistoryTask historyTask) {
+        histTaskActorService.removeById(historyTask.getId());
+        snakerHistTaskService.removeById(historyTask.getId());
 
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateOrderVariable(Order order) {
-
+        updateOrder(order);
+        HistoryOrder hist = getHistOrder(order.getId());
+        hist.setVariable(order.getVariable());
+        updateHistory(hist);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveSurrogate(Surrogate surrogate) {
-
+        SurrogateEntity surrogateEntity = entityConvert.toSurrogateEntity(surrogate);
+        snakerSurrogateService.saveOrUpdate(surrogateEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateSurrogate(Surrogate surrogate) {
-
+        SurrogateEntity surrogateEntity = entityConvert.toSurrogateEntity(surrogate);
+        snakerSurrogateService.updateById(surrogateEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteSurrogate(Surrogate surrogate) {
-
+         snakerSurrogateService.removeById(surrogate.getId());
     }
 
     @Override
-    public Surrogate getSurrogate(String s) {
-        return null;
+    public Surrogate getSurrogate(String id) {
+        return snakerSurrogateService.getSurrogateById(id);
     }
 
     @Override
-    public List<Surrogate> getSurrogate(Page<Surrogate> page, QueryFilter queryFilter) {
-        return null;
+    public List<Surrogate> getSurrogate(Page<Surrogate> page, QueryFilter filter) {
+        MpPage<Surrogate> mpPage = entityConvert.toSurrogateMpPage(page);
+        String[] names = filter.getNames();
+        LambdaQueryWrapper<SurrogateEntity> wrapper = Wrappers.<SurrogateEntity>lambdaQuery()
+                .in(ArrayUtils.isNotEmpty(filter.getNames()), SurrogateEntity::getProcessName, names)
+                .in(ArrayUtils.isNotEmpty(filter.getOperators()),SurrogateEntity::getOperator, filter.getOperators())
+                .lt(StringUtils.isNotBlank(filter.getOperateTime()), SurrogateEntity::getSdate, filter.getOperateTime())
+                .gt(StringUtils.isNotBlank(filter.getOperateTime()), SurrogateEntity::getEdate,filter.getOperateTime())
+                .orderByDesc(!filter.isOrderBySetted(), SurrogateEntity::getSdate);
+
+        IPage iPage = snakerSurrogateService.findOne(mpPage, wrapper);
+
+        return iPage.getRecords();
     }
+
+
 
     @Override
     public Task getTask(String s) {

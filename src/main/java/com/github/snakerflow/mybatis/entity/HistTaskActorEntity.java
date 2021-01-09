@@ -7,7 +7,8 @@ import lombok.Data;
 
 /**
     * 历史任务参与者表
-    */
+ * @author zhaocheng
+ */
 @Data
 @TableName(value = "wf_hist_task_actor")
 public class HistTaskActorEntity implements Serializable {
