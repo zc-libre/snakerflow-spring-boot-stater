@@ -1,5 +1,8 @@
 package com.github.snakerflow.mybatis;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -20,7 +23,9 @@ import org.snaker.engine.entity.*;
 import org.snaker.engine.entity.Process;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author zhaocheng
@@ -38,8 +43,9 @@ public class MybatisPlusAccess implements DBAccess {
     private SnakerTaskService snakerTaskService;
     private SnakerTaskActorService snakerTaskActorService;
     private SnakerHistTaskService snakerHistTaskService;
-    private SnakerSurrogateService snakerSurrogateService;
     private SnakerHistTaskActorService histTaskActorService;
+    private SnakerSurrogateService snakerSurrogateService;
+
     private EntityConvert entityConvert;
 
     @Override
@@ -51,63 +57,97 @@ public class MybatisPlusAccess implements DBAccess {
     @Transactional(rollbackFor = Exception.class)
     public void saveTask(Task task) {
         TaskEntity taskEntity = entityConvert.toTaskEntity(task);
-        snakerTaskService.saveOrUpdate(taskEntity);
+        TaskEntity dbTask = snakerTaskService.getById(task.getId());
+        if (Objects.nonNull(dbTask)) {
+            snakerTaskService.updateById(taskEntity);
+            return;
+        }
+        snakerTaskService.save(taskEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveOrder(Order order) {
         OrderEntity orderEntity = entityConvert.toOrderEntity(order);
-        snakerOrderService.saveOrUpdate(orderEntity);
+        Order dbOrder = snakerOrderService.getOrderById(order.getId());
+        if (Objects.nonNull(dbOrder)) {
+            snakerOrderService.updateById(orderEntity);
+            return;
+        }
+        snakerOrderService.save(orderEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveCCOrder(CCOrder ccOrder) {
         CcOrderEntity ccOrderEntity = entityConvert.toCcOrderEntity(ccOrder);
-        snakerCcOrderService.saveOrUpdate(ccOrderEntity);
+        CcOrderEntity entity = snakerCcOrderService.getOne(Wrappers.<CcOrderEntity>lambdaQuery().eq(CcOrderEntity::getOrderId, ccOrder.getOrderId()));
+        if (Objects.nonNull(entity)) {
+            snakerCcOrderService.update(Wrappers.<CcOrderEntity>lambdaUpdate()
+                    .setEntity(ccOrderEntity)
+                    .eq(CcOrderEntity::getOrderId,ccOrder.getOrderId()));
+            return;
+        }
+        snakerCcOrderService.save(ccOrderEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveProcess(Process process) {
         ProcessEntity processEntity = entityConvert.toProcessEntity(process);
-        snakerProcessService.saveOrUpdate(processEntity);
+        Process dbProcess = snakerProcessService.getProcessById(process.getId());
+        if (Objects.nonNull(dbProcess)) {
+            snakerProcessService.updateById(processEntity);
+            return;
+        }
+        snakerProcessService.save(processEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveTaskActor(TaskActor taskActor) {
         TaskActorEntity taskActorEntity = entityConvert.toTaskActorEntity(taskActor);
-        snakerTaskActorService.saveOrUpdate(taskActorEntity);
+        TaskActorEntity actorEntity = getSnakerTaskActorService().getOne(Wrappers.<TaskActorEntity>lambdaQuery().eq(TaskActorEntity::getTaskId, taskActor.getTaskId()));
+        if (Objects.nonNull(actorEntity)) {
+            snakerTaskActorService.update(Wrappers.<TaskActorEntity>lambdaUpdate()
+                    .setEntity(taskActorEntity)
+                    .eq(TaskActorEntity::getTaskId, taskActor.getTaskId()));
+            return;
+        }
+        snakerTaskActorService.save(taskActorEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateTask(Task task) {
         TaskEntity taskEntity = entityConvert.toTaskEntity(task);
-        snakerTaskService.saveOrUpdate(taskEntity);
+        Task dbTask = snakerTaskService.getTaskById(task.getId());
+        if (Objects.nonNull(dbTask)) {
+            snakerTaskService.updateById(taskEntity);
+            return;
+        }
+        snakerTaskService.save(taskEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateOrder(Order order) {
         OrderEntity orderEntity = entityConvert.toOrderEntity(order);
-        snakerOrderService.saveOrUpdate(orderEntity);
+        snakerOrderService.updateById(orderEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateCCOrder(CCOrder ccOrder) {
         CcOrderEntity ccOrderEntity = entityConvert.toCcOrderEntity(ccOrder);
-        snakerCcOrderService.saveOrUpdate(ccOrderEntity);
+        snakerCcOrderService.updateById(ccOrderEntity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateProcess(Process process) {
         ProcessEntity processEntity = entityConvert.toProcessEntity(process);
-        snakerProcessService.saveOrUpdate(processEntity);
+        snakerProcessService.updateById(processEntity);
     }
 
     @Override
@@ -159,7 +199,12 @@ public class MybatisPlusAccess implements DBAccess {
     @Transactional(rollbackFor = Exception.class)
     public void saveHistory(HistoryOrder historyOrder) {
         HistOrderEntity histOrderEntity = entityConvert.toHistOrderEntity(historyOrder);
-        snakerHistOrderService.saveOrUpdate(histOrderEntity);
+        HistOrderEntity entity = snakerHistOrderService.getById(historyOrder.getId());
+        if (Objects.nonNull(entity)) {
+            snakerHistOrderService.updateById(histOrderEntity);
+            return;
+        }
+        snakerHistOrderService.save(histOrderEntity);
 
     }
 
@@ -174,7 +219,12 @@ public class MybatisPlusAccess implements DBAccess {
     @Transactional(rollbackFor = Exception.class)
     public void saveHistory(HistoryTask historyTask) {
         HistTaskEntity histTaskEntity = entityConvert.toHistTaskEntity(historyTask);
-        snakerHistTaskService.saveOrUpdate(histTaskEntity);
+        HistTaskEntity entity = snakerHistTaskService.getById(historyTask.getId());
+        if (Objects.nonNull(entity)) {
+            snakerHistTaskService.updateById(histTaskEntity);
+            return;
+        }
+        snakerHistTaskService.save(histTaskEntity);
     }
 
     @Override
@@ -204,7 +254,12 @@ public class MybatisPlusAccess implements DBAccess {
     @Transactional(rollbackFor = Exception.class)
     public void saveSurrogate(Surrogate surrogate) {
         SurrogateEntity surrogateEntity = entityConvert.toSurrogateEntity(surrogate);
-        snakerSurrogateService.saveOrUpdate(surrogateEntity);
+        Surrogate entity = snakerSurrogateService.getSurrogateById(surrogate.getId());
+        if (Objects.nonNull(entity)) {
+            snakerSurrogateService.updateById(surrogateEntity);
+            return;
+        }
+        snakerSurrogateService.save(surrogateEntity);
     }
 
     @Override
@@ -228,69 +283,72 @@ public class MybatisPlusAccess implements DBAccess {
     @Override
     public List<Surrogate> getSurrogate(Page<Surrogate> page, QueryFilter filter) {
         MpPage<Surrogate> mpPage = entityConvert.toSurrogateMpPage(page);
-        String[] names = filter.getNames();
+
         LambdaQueryWrapper<SurrogateEntity> wrapper = Wrappers.<SurrogateEntity>lambdaQuery()
-                .in(ArrayUtils.isNotEmpty(filter.getNames()), SurrogateEntity::getProcessName, names)
-                .in(ArrayUtils.isNotEmpty(filter.getOperators()),SurrogateEntity::getOperator, filter.getOperators())
+                .in(ArrayUtils.isNotEmpty(filter.getNames()), SurrogateEntity::getProcessName, CollUtil.toList(filter.getNames()))
+                .in(ArrayUtils.isNotEmpty(filter.getOperators()),SurrogateEntity::getOperator, CollUtil.toList(filter.getOperators()))
                 .lt(StringUtils.isNotBlank(filter.getOperateTime()), SurrogateEntity::getSdate, filter.getOperateTime())
                 .gt(StringUtils.isNotBlank(filter.getOperateTime()), SurrogateEntity::getEdate,filter.getOperateTime())
                 .orderByDesc(!filter.isOrderBySetted(), SurrogateEntity::getSdate);
 
-        IPage iPage = snakerSurrogateService.findOne(mpPage, wrapper);
-
-        return iPage.getRecords();
+        return snakerSurrogateService.findOne(mpPage, wrapper);
     }
 
 
 
+
     @Override
-    public Task getTask(String s) {
-        return null;
+    public Task getTask(String id) {
+        return snakerTaskService.getTaskById(id);
     }
 
     @Override
-    public HistoryTask getHistTask(String s) {
-        return null;
+    public HistoryTask getHistTask(String id) {
+        HistTaskEntity histTaskEntity = snakerHistTaskService.getById(id);
+        return entityConvert.toHistoryTask(histTaskEntity);
     }
 
     @Override
-    public List<Task> getNextActiveTasks(String s) {
-        return null;
+    public List<Task> getNextActiveTasks(String parentTaskId) {
+        return snakerTaskService.getNextActiveTasks(parentTaskId);
     }
 
     @Override
-    public List<Task> getNextActiveTasks(String s, String s1, String s2) {
-        return null;
+    public List<Task> getNextActiveTasks(String orderId, String taskName, String parentTaskId) {
+        return snakerTaskService.getNextActiveTasks(orderId, taskName, parentTaskId);
     }
 
     @Override
-    public List<TaskActor> getTaskActorsByTaskId(String s) {
-        return null;
+    public List<TaskActor> getTaskActorsByTaskId(String id) {
+        return snakerTaskActorService.getTaskActorsByTaskId(id);
     }
 
     @Override
-    public List<HistoryTaskActor> getHistTaskActorsByTaskId(String s) {
-        return null;
+    public List<HistoryTaskActor> getHistTaskActorsByTaskId(String taskId) {
+        return histTaskActorService.getHistTaskActorsByTaskId(taskId);
     }
 
     @Override
-    public Order getOrder(String s) {
-        return null;
+    public Order getOrder(String orderId) {
+        return snakerOrderService.getOrderById(orderId);
     }
 
     @Override
-    public List<CCOrder> getCCOrder(String s, String... strings) {
-        return null;
+    public List<CCOrder> getCCOrder(String orderId, String... actorIds) {
+        List<String> actorIdList =  Arrays.asList(actorIds);
+        return snakerCcOrderService.getCCOrder(orderId, actorIdList);
     }
 
     @Override
-    public HistoryOrder getHistOrder(String s) {
-        return null;
+    public HistoryOrder getHistOrder(String orderId) {
+        HistOrderEntity histOrderEntity = snakerHistOrderService.getById(orderId);
+        return entityConvert.toHistOrder(histOrderEntity);
+
     }
 
     @Override
-    public Process getProcess(String s) {
-        return null;
+    public Process getProcess(String id) {
+        return snakerProcessService.getProcessById(id);
     }
 
     @Override
@@ -300,43 +358,54 @@ public class MybatisPlusAccess implements DBAccess {
     }
 
     @Override
-    public List<Process> getProcesss(Page<Process> page, QueryFilter queryFilter) {
-        return null;
+    public List<Process> getProcesss(Page<Process> page, QueryFilter filter) {
+        MpPage<ProcessEntity> mpPage = entityConvert.toProcessMpPage(page);
+
+
+        return snakerProcessService.findList(mpPage, filter);
     }
 
     @Override
-    public List<Order> getActiveOrders(Page<Order> page, QueryFilter queryFilter) {
-        return null;
+    public List<Order> getActiveOrders(Page<Order> page, QueryFilter filter) {
+        MpPage<Order> mpPage = entityConvert.toOrderMpPage(page);
+        return snakerOrderService.getActiveOrders(mpPage, filter);
     }
 
     @Override
-    public List<Task> getActiveTasks(Page<Task> page, QueryFilter queryFilter) {
-        return null;
+    public List<Task> getActiveTasks(Page<Task> page, QueryFilter filter) {
+        MpPage<Task> mpPage = entityConvert.toTaskMpPage(page);
+        return snakerTaskService.getActiveTasks(mpPage, filter);
     }
 
     @Override
-    public List<HistoryOrder> getHistoryOrders(Page<HistoryOrder> page, QueryFilter queryFilter) {
-        return null;
+    public List<HistoryOrder> getHistoryOrders(Page<HistoryOrder> page, QueryFilter filter) {
+        MpPage<HistoryOrder> mpPage = entityConvert.toHistoryOrderMpPage(page);
+        return snakerHistOrderService.getHistoryOrders(mpPage, filter);
     }
 
     @Override
-    public List<HistoryTask> getHistoryTasks(Page<HistoryTask> page, QueryFilter queryFilter) {
-        return null;
+    public List<HistoryTask> getHistoryTasks(Page<HistoryTask> page, QueryFilter filter) {
+        MpPage<HistoryTask> mpPage = entityConvert.toHistoryTaskMpPage(page);
+        return snakerHistTaskService.getHistoryTasks(mpPage, filter);
     }
 
     @Override
-    public List<WorkItem> getWorkItems(Page<WorkItem> page, QueryFilter queryFilter) {
-        return null;
+    public List<WorkItem> getWorkItems(Page<WorkItem> page, QueryFilter filter) {
+        MpPage<WorkItem> mpPage = entityConvert.toWorkItemTaskMpPage(page);
+        return snakerTaskService.getWorkItems(mpPage, filter);
     }
 
     @Override
-    public List<HistoryOrder> getCCWorks(Page<HistoryOrder> page, QueryFilter queryFilter) {
-        return null;
+    public List<HistoryOrder> getCCWorks(Page<HistoryOrder> page, QueryFilter filter) {
+        MpPage<HistoryOrder> mpPage = entityConvert.toHistoryOrderMpPage(page);
+        return snakerHistOrderService.getCCWorks(mpPage, filter);
     }
 
     @Override
-    public List<WorkItem> getHistoryWorkItems(Page<WorkItem> page, QueryFilter queryFilter) {
-        return null;
+    public List<WorkItem> getHistoryWorkItems(Page<WorkItem> page, QueryFilter filter) {
+        MpPage<WorkItem> mpPage = entityConvert.toWorkItemMpPage(page);
+
+        return snakerHistTaskService.getHistoryWorkItems(mpPage, filter);
     }
 
     @Override

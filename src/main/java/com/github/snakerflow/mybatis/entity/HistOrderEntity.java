@@ -8,8 +8,9 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
-    * 历史流程实例表
-    */
+ * 历史流程实例表
+ * @author zhaocheng
+ */
 @Data
 @TableName(value = "wf_hist_order")
 public class HistOrderEntity implements Serializable {

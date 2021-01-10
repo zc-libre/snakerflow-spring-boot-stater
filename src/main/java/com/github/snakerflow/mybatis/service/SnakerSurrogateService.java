@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.snakerflow.util.MpPage;
 import org.snaker.engine.entity.Surrogate;
 
+import java.util.List;
+
 /**
  * @author zhaocheng
  */
@@ -25,5 +27,5 @@ public interface SnakerSurrogateService extends IService<SurrogateEntity>{
      * @param wrapper /
      * @return /
      */
-    IPage findOne(MpPage mpPage, Wrapper<SurrogateEntity> wrapper);
+    List<Surrogate> findOne(MpPage mpPage, Wrapper<SurrogateEntity> wrapper);
 }

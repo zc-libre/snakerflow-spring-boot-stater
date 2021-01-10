@@ -49,6 +49,7 @@ public class SnakerMybatisAutoConfiguration {
                                         SnakerTaskService snakerTaskService,
                                         SnakerTaskActorService snakerTaskActorService,
                                         SnakerHistTaskService snakerHistTaskService,
+                                        SnakerHistTaskActorService histTaskActorService,
                                         SnakerSurrogateService snakerSurrogateService) {
         log.info("获取到数据库连接类型: mybatis-plus");
         MybatisPlusAccess access = new MybatisPlusAccess();
@@ -59,6 +60,7 @@ public class SnakerMybatisAutoConfiguration {
         access.setSnakerTaskService(snakerTaskService);
         access.setSnakerTaskActorService(snakerTaskActorService);
         access.setSnakerHistTaskService(snakerHistTaskService);
+        access.setHistTaskActorService(histTaskActorService);
         access.setSnakerSurrogateService(snakerSurrogateService);
         access.setEntityConvert(EntityConvert.INSTANCE);
         return access;

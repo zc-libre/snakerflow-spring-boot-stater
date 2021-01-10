@@ -3,10 +3,13 @@ package com.github.snakerflow.mybatis.mapper;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.snakerflow.mybatis.entity.SurrogateEntity;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.snaker.engine.entity.Surrogate;
+
+import java.util.List;
 
 import static com.baomidou.mybatisplus.core.toolkit.Constants.WRAPPER;
 
@@ -33,5 +36,5 @@ public interface SurrogateMapper extends BaseMapper<SurrogateEntity> {
      * @return /
      */
     @Select("select id, process_Name, operator, surrogate, odate, sdate, edate, state from wf_surrogate ${ew.customSqlSegment}")
-    IPage findOne(IPage page, @Param(WRAPPER)Wrapper<SurrogateEntity> wrapper);
+    List<Surrogate> findOne(Page page, @Param(WRAPPER)Wrapper<SurrogateEntity> wrapper);
 }

@@ -15,4 +15,22 @@
     <!--@mbg.generated-->
     order_Id, actor_Id, creator, create_Time, finish_Time, `status`
   </sql>
+
+  <select id="findListByOrderIdAndActorIds" resultType="org.snaker.engine.entity.CCOrder">
+    SELECT
+           <include refid="Base_Column_List"/>
+    FROM
+           wf_cc_order
+    <where>
+      <if test="orderId != null and orderId != ''">
+        and order_Id = #{orderId}
+      </if>
+      <if test="actorIds != null and actorIds.size() != 0">
+        and actor_Id IN
+        <foreach collection="actorIds" index="index" item="actorId" open="(" close=")" separator=",">
+          #{actorId}
+        </foreach>
+       </if>
+    </where>
+  </select>
 </mapper>

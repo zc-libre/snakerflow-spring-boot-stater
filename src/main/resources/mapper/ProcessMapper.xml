@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.github.snakerflow.mybatis.mapper.ProcessMapper">
-  <resultMap id="BaseResultMap" type="com.github.snakerflow.mybatis.entity.ProcessEntity">
+  <resultMap id="BaseResultMap" type="org.snaker.engine.entity.Process">
     <!--@mbg.generated-->
     <!--@Table wf_process-->
     <id column="id" jdbcType="VARCHAR" property="id" />
@@ -13,115 +13,51 @@
     <result column="version" jdbcType="INTEGER" property="version" />
     <result column="create_Time" jdbcType="VARCHAR" property="createTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="content" property="bytes"/>
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.github.snakerflow.mybatis.entity.ProcessEntity">
-    <!--@mbg.generated-->
-    <!--@Table wf_process-->
-    <result column="content" jdbcType="BLOB" property="content" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, `name`, display_Name, `type`, instance_Url, `state`, version, create_Time, creator
-  </sql>
-  <sql id="Blob_Column_List">
-    <!--@mbg.generated-->
-    content
-  </sql>
 
-  <insert id="SAVE" parameterType="process">
-    insert into wf_process (id,name,display_Name,type,instance_Url,state,content,version,create_Time,creator)
-    values (#{id, jdbcType=VARCHAR},#{name, jdbcType=VARCHAR},#{displayName, jdbcType=VARCHAR},
-    #{type, jdbcType=NUMERIC},#{instanceUrl, jdbcType=VARCHAR},#{state, jdbcType=NUMERIC},
-    #{bytes, jdbcType=BLOB},#{version, jdbcType=NUMERIC},#{createTime, jdbcType=VARCHAR},#{creator, jdbcType=VARCHAR})
-  </insert>
-  <update id="UPDATE" parameterType="process">
-    update wf_process set
-    name=#{name, jdbcType=VARCHAR},
-    display_Name=#{displayName, jdbcType=VARCHAR},
-    state=#{state, jdbcType=NUMERIC},
-    instance_Url=#{instanceUrl, jdbcType=VARCHAR},
-    content=#{bytes, jdbcType=BLOB},
-    create_Time=#{createTime, jdbcType=VARCHAR},
-    creator=#{creator, jdbcType=VARCHAR}
-    where id=#{id, jdbcType=VARCHAR}
-  </update>
-  <select id="SELECTONE" parameterType="string" resultType="process">
-    select
-    id,
-    name,
-    display_Name as displayName,
-    type,
-    instance_Url as instanceUrl,
-    state,
-    content as bytes,
-    version,
-    create_Time as createTime,
-    creator
-    from wf_process
-    where id = #{id, jdbcType=VARCHAR}
-  </select>
-  <select id="SELECTVERSION" parameterType="string" resultType="integer">
-    select
-    max(version)
-    from wf_process
-    where name = #{name, jdbcType=VARCHAR}
-  </select>
-  <select id="SELECTLIST" resultType="process">
-    select
-            id,
-            name,
-            display_Name as displayName,
-            type,
-            instance_Url as instanceUrl,
-            state,
-            content as bytes,
-            version,
-            create_Time as createTime,
-            creator
-    from wf_process
-  </select>
 
-  <select id="getProcesss" resultType="process" parameterType="hashmap">
-    ${limitBefore}
+  <select id="findList" resultMap="BaseResultMap">
     select
-    id,
-    name,
-    display_Name as displayName,
-    type,
-    instance_Url as instanceUrl,
-    state,
-    content as bytes,
-    version,
-    create_Time as createTime,
-    creator
-    <include refid="selectProcesss"/>
-    ${orderby}
-    ${limitAfter}
-  </select>
-
-  <select id="getProcesssCount" resultType="long" parameterType="hashmap">
-    select count(id)
-    <include refid="selectProcesss"/>
-  </select>
-
-  <sql id="selectProcesss">
-    from wf_process
+            id,name,display_Name,type,instance_Url,state, content, version,create_Time,creator
+    from
+            wf_process
     <where>
-      <if test="names != null and names.length > 0">
-        and name in
-        <foreach collection="names" index="index" item="item" open="(" separator="," close=")">
-          #{item, jdbcType=VARCHAR}
-        </foreach>
-      </if>
-      <if test="displayName != null">
-        and display_Name like "%#{displayName, jdbcType=VARCHAR}%"
-      </if>
-      <if test="state != null">
-        and state = #{state, jdbcType=NUMERIC}
-      </if>
-      <if test="version != null">
-        and version = #{version, jdbcType=NUMERIC}
+      <if test="filter != null ">
+        <if test="filter.names != null and filter.names.length != 0">
+          and name IN
+          <foreach collection="filter.names" index="index" item="name" separator="," open="(" close=")">
+            #{name}
+          </foreach>
+        </if>
+
+        <if test="filter.displayName != null and filter.displayName != ''">
+          <bind name="displayName" value="'%'+ filter.displayName +'%'"/>
+          and display_Name like #{displayName}
+        </if>
+        <if test="filter.version != null ">
+          and version = #{filter.version}
+        </if>
+        <if test="filter.state != null ">
+          and state = #{filter.state}
+        </if>
+        <if test="filter.processType != null and filter.processType != ''">
+          and type = #{filter.processType}
+        </if>
+        <if test="filter.operators != null and filter.operators.length != 0">
+          and creator in
+          <foreach collection="filter.operators" index="index" item="creator" separator="," open="(" close=")">
+            #{creator}
+          </foreach>
+        </if>
+        <if test="(filter.orderBy != null and filter.orderNo != '') and (filter.order) != null and filter.order != ''">
+          order by name desc
+        </if>
       </if>
     </where>
-  </sql>
+  </select>
+
+  <select id="findById" resultMap="BaseResultMap">
+    SELECT id,name,display_Name,type,instance_Url,state, content, version,create_Time,creator FROM wf_process WHERE id = #{id}
+  </select>
 </mapper>

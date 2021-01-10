@@ -21,4 +21,98 @@
     id, process_Id, order_State, creator, create_Time, end_Time, expire_Time, priority,
     parent_Id, order_No, `variable`
   </sql>
+
+  <select id="findListPage" resultType="org.snaker.engine.entity.HistoryOrder">
+    select
+            o.id,o.process_Id,o.order_State,o.priority,o.creator,o.create_Time,o.end_Time,o.parent_Id,o.expire_Time,o.order_No,o.variable
+    from
+            wf_hist_order o
+    left join
+            wf_process p on p.id = o.process_id
+    <where>
+      <if test="filter != null ">
+        <if test="filter.operators != null and filter.operators.length != 0">
+          and o.creator in
+          <foreach collection="filter.operators" index="index" item="creator" separator="," open="(" close=")">
+            #{creator}
+          </foreach>
+        </if>
+        <if test="filter.names != null and filter.names.length != 0">
+          and p.name IN
+          <foreach collection="filter.names" index="index" item="name" separator="," open="(" close=")">
+            #{name}
+          </foreach>
+        </if>
+        <if test="filter.processId != null and filter.processId != ''">
+          and o.process_Id = #{filter.processId}
+        </if>
+        <if test="filter.processType != null and filter.processType != ''">
+          and p.type = #{filter.processType}
+        </if>
+        <if test="filter.displayName != null and filter.displayName != ''">
+          <bind name="displayName" value="'%'+ filter.displayName +'%'"/>
+          and p.display_Name like #{displayName}
+        </if>
+        <if test="filter.parentId != null and filter.parentId != ''">
+          and o.parent_Id = #{filter.processId}
+        </if>
+        <if test="filter.state != null ">
+          and o.order_State = #{filter.state}
+        </if>
+        <if test="filter.createTimeStart != null and filter.createTimeStart != ''" >
+          and o.create_Time &gt;= #{filter.createTimeStart}
+        </if>
+        <if test="filter.createTimeEnd != null and filter.createTimeEnd != ''">
+          and o.create_Time &lt;= #{filter.createTimeEnd}
+        </if>
+        <if test="filter.orderNo != null and filter.orderNo != ''">
+          and o.order_No = #{filter.orderNo}
+        </if>
+        <if test="(filter.orderBy != null and filter.orderNo != '') and (filter.order) != null and filter.order != ''">
+          order by o.create_Time desc
+        </if>
+      </if>
+    </where>
+    </select>
+
+  <select id="getCCWorks" resultType="org.snaker.engine.entity.HistoryOrder">
+    select
+            id,process_Id,order_State,priority,cc.creator,cc.create_Time,end_Time,parent_Id,expire_Time,order_No,variable
+    from
+            wf_cc_order cc
+    left join
+            wf_hist_order o on cc.order_id = o.id
+    <where>
+      <if test="filter != null ">
+        <if test="filter.operators != null and filter.operators.length != 0 ">
+          and cc.actor_Id in
+          <foreach collection="filter.operators" index="index" separator="," item="actorId" open="(" close=")">
+            #{actorId,jdbcType=VARCHAR}
+          </foreach>
+        </if>
+        <if test="filter.parentId != null and filter.parentId != ''">
+          and parent_Id = #{filter.processId}
+        </if>
+        <if test="filter.state != null ">
+          and cc.status = #{filter.state}
+        </if>
+        <if test="filter.processId != null and filter.processId != ''">
+          and process_Id = #{filter.processId}
+        </if>
+        <if test="filter.createTimeStart != null and filter.createTimeStart != ''" >
+          and cc.create_Time &gt;= #{filter.createTimeStart}
+        </if>
+        <if test="filter.createTimeEnd != null and filter.createTimeEnd != ''">
+          and cc.create_Time &lt;= #{filter.createTimeEnd}
+        </if>
+        <if test="filter.orderNo != null and filter.orderNo != ''">
+          and order_No = #{filter.orderNo}
+        </if>
+        <if test="(filter.orderBy != null and filter.orderNo != '') and (filter.order) != null and filter.order != ''">
+          order by create_Time desc
+        </if>
+      </if>
+    </where>
+
+  </select>
 </mapper>

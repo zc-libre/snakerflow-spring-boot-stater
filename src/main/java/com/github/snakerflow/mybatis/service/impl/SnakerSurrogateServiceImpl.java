@@ -11,6 +11,8 @@ import com.github.snakerflow.util.MpPage;
 import lombok.extern.slf4j.Slf4j;
 import org.snaker.engine.entity.Surrogate;
 
+import java.util.List;
+
 /**
  * @author zhaocheng
  */
@@ -23,7 +25,7 @@ public class SnakerSurrogateServiceImpl extends ServiceImpl<SurrogateMapper, Sur
     }
 
     @Override
-    public IPage findOne(MpPage mpPage, Wrapper<SurrogateEntity> wrapper) {
+    public List<Surrogate> findOne(MpPage mpPage, Wrapper<SurrogateEntity> wrapper) {
         return baseMapper.findOne(mpPage, wrapper);
     }
 }

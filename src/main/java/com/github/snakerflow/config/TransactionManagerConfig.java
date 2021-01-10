@@ -33,7 +33,6 @@ import java.util.Map;
 @Configuration
 @ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class })
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
-@EnableTransactionManagement(proxyTargetClass = true)
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class TransactionManagerConfig {
 

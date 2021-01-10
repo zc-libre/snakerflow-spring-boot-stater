@@ -19,9 +19,173 @@
     <result column="variable" jdbcType="VARCHAR" property="variable" />
     <result column="version" jdbcType="BOOLEAN" property="version" />
   </resultMap>
+
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, order_Id, task_Name, display_Name, task_Type, perform_Type, `operator`, create_Time,
     finish_Time, expire_Time, action_Url, parent_Task_Id, `variable`, version
   </sql>
+    <sql id="selectActiveTasksPart">
+        select id,order_Id,task_Name,display_Name,task_Type,perform_Type,operator,create_Time,finish_Time,expire_Time,action_Url,parent_Task_Id,variable, version from wf_task
+    </sql>
+    <sql id="fromWorkItemsPart">
+        from wf_task t
+        left join wf_order o on t.order_id = o.id
+        left join wf_task_actor ta on ta.task_id=t.id
+        left join wf_process p on p.id = o.process_id
+        <where>
+            <if test="processId != null">
+                and o.process_Id = #{processId, jdbcType=VARCHAR}
+            </if>
+            <if test="actorIds != null and actorIds.length > 0">
+                and ta.actor_Id in
+                <foreach collection="actorIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item, jdbcType=VARCHAR}
+                </foreach>
+            </if>
+            <if test="createTimeStart != null">
+                and t.create_Time &gt;= #{createTimeStart, jdbcType=VARCHAR}
+            </if>
+            <if test="createTimeEnd != null">
+                and t.create_Time &lt;= #{createTimeEnd, jdbcType=VARCHAR}
+            </if>
+            <if test="parentId != null">
+                and o.parent_Id = #{parentId, jdbcType=VARCHAR}
+            </if>
+            <if test="taskType != null">
+                and t.task_Type = #{taskType, jdbcType=NUMERIC}
+            </if>
+            <if test="performType != null">
+                and t.perform_Type = #{performType, jdbcType=NUMERIC}
+            </if>
+        </where>
+    </sql>
+
+  <select id="findTaskList" resultType="org.snaker.engine.entity.Task">
+    select
+            id,order_Id,task_Name,display_Name,task_Type,perform_Type,
+            operator,create_Time,finish_Time,expire_Time,action_Url,
+            parent_Task_Id,variable, version
+    from
+            wf_task
+    where
+            parent_task_id
+                    in
+
+
+            ( select
+                      ht.id
+              from
+                      wf_hist_task ht
+              where
+                      ht.order_id = #{orderId}
+                and
+                      ht.task_name = #{taskName}
+                and
+                      ht.parent_task_id = #{parentTaskId})
+    </select>
+
+  <select id="findActiveTasks" resultType="org.snaker.engine.entity.Task">
+      <include refid="selectActiveTasksPart"/>
+      <if test="filter.operators != null and filter.operators.length != 0 ">
+          left join
+                 wf_task_actor ta on ta.task_id = id
+      </if>
+          <where>
+             <if test="filter != null ">
+                 <if test="filter.orderId != null and filter.orderId != ''">
+                     and order_Id = #{filter.orderId,jdbcType=VARCHAR}
+                 </if>
+                 <if test="filter.excludedIds != null and filter.excludedIds.length != 0">
+                     and id not in
+                     <foreach collection="filter.excludedIds" index="index" item="id" separator="," open="(" close=")">
+                         #{id}
+                     </foreach>
+                 </if>
+                 <if test="filter.operators != null and filter.operators.length != 0 ">
+                     and ta.actor_Id in
+                     <foreach collection="filter.operators" index="index" separator="," item="actorId" open="(" close=")">
+                         #{actorId,jdbcType=VARCHAR}
+                     </foreach>
+                 </if>
+                 <if test="filter.names != null and filter.names.length != 0">
+                     and task_Name in
+                     <foreach collection="filter.names" index="index" item="taskName" open="(" close=")" separator=",">
+                         #{taskName,jdbcType=VARCHAR}
+                     </foreach>
+                 </if>
+                 <if test="filter.createTimeStart != null and filter.createTimeStart != ''" >
+                     and create_Time &gt;= #{filter.createTimeStart}
+                 </if>
+                 <if test="filter.createTimeEnd != null and filter.createTimeEnd != ''">
+                     and create_Time &lt;= #{filter.createTimeEnd}
+                 </if>
+                 <if test="(filter.orderBy != null and filter.orderNo != '') and (filter.order) != null and filter.order != ''">
+                     order by create_Time desc
+                 </if>
+             </if>
+          </where>
+
+  </select>
+
+  <select id="findWorkItems" resultType="org.snaker.engine.entity.WorkItem">
+      select distinct
+              o.process_Id, t.order_Id, t.id as id, t.id as task_Id, p.display_Name as process_Name, p.instance_Url, o.parent_Id, o.creator,
+              o.create_Time as order_Create_Time, o.expire_Time as order_Expire_Time, o.order_No, o.variable as order_Variable,
+              t.display_Name as task_Name, t.task_Name as task_Key, t.task_Type, t.perform_Type, t.operator, t.action_Url,
+              t.create_Time as task_Create_Time, t.finish_Time as task_End_Time, t.expire_Time as task_Expire_Time, t.variable as task_Variable
+              from
+                      wf_task t
+      left join
+                           wf_order o on t.order_id = o.id
+      left join
+                           wf_task_actor ta on ta.task_id=t.id
+      left join
+                           wf_process p on p.id = o.process_id
+      <where>
+          <if test="filter != null ">
+              <if test="filter.operators != null and filter.operators.length != 0 ">
+                  and ta.actor_Id in
+                  <foreach collection="filter.operators" index="index" separator="," item="actorId" open="(" close=")">
+                      #{actorId,jdbcType=VARCHAR}
+                  </foreach>
+              </if>
+              <if test="filter.processId != null and filter.processId != ''">
+                  and o.process_Id = #{filter.processId}
+              </if>
+              <if test="filter.displayName != null and filter.displayName != ''">
+                  <bind name="displayName" value="'%'+ filter.displayName +'%'"/>
+                  and p.display_Name like #{displayName}
+              </if>
+              <if test="filter.parentId != null and filter.parentId != ''">
+                  and o.parent_Id = #{filter.processId}
+              </if>
+              <if test="filter.orderId != null and filter.orderId != ''">
+                  and t.order_id = #{filter.orderId,jdbcType=VARCHAR}
+              </if>
+              <if test="filter.names != null and filter.names.length != 0">
+                  and t.task_Name in
+                  <foreach collection="filter.names" index="index" item="taskName" open="(" close=")" separator=",">
+                      #{taskName,jdbcType=VARCHAR}
+                  </foreach>
+              </if>
+              <if test="filter.taskType != null ">
+                  and t.task_Type = #{filter.taskType}
+              </if>
+              <if test="filter.performType != null ">
+                  and t.perform_Type = #{filter.performType}
+              </if>
+              <if test="filter.createTimeStart != null and filter.createTimeStart != ''" >
+                  and t.create_Time &gt;= #{filter.createTimeStart}
+              </if>
+              <if test="filter.createTimeEnd != null and filter.createTimeEnd != ''">
+                  and t.create_Time &lt;= #{filter.createTimeEnd}
+              </if>
+              <if test="(filter.orderBy != null and filter.orderNo != '') and (filter.order) != null and filter.order != ''">
+                 order by t.create_Time desc
+              </if>
+          </if>
+      </where>
+
+  </select>
 </mapper>
