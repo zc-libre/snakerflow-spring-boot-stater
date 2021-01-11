@@ -3,6 +3,7 @@ package com.github.snakerflow.mybatis.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.snakerflow.mybatis.entity.ProcessEntity;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.snaker.engine.access.QueryFilter;
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * @author zhaocheng
  */
+
 public interface ProcessMapper extends BaseMapper<ProcessEntity> {
 
     /**

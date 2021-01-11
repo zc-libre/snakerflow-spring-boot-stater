@@ -1,15 +1,13 @@
 package com.github.snakerflow.mybatis.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.snakerflow.mybatis.entity.CcOrderEntity;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import org.snaker.engine.entity.CCOrder;
 
 import java.util.List;
 
-import static com.baomidou.mybatisplus.core.toolkit.Constants.WRAPPER;
 
 /**
  * @author zhaocheng

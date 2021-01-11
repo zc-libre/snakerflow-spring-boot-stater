@@ -2,6 +2,7 @@ package com.github.snakerflow.mybatis.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.snakerflow.mybatis.entity.TaskActorEntity;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.snaker.engine.entity.TaskActor;
 
