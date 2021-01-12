@@ -33,14 +33,13 @@ import java.util.Map;
 @Configuration
 @ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class })
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
+@EnableTransactionManagement
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class TransactionManagerConfig {
 
     private static final String AOP_POINTCUT_EXPRESSION = "execution(* org.snaker.engine.core..*.*(..))";
 
-
     @Bean
-    @ConditionalOnMissingBean
     public TransactionInterceptor txAdvice(TransactionManager transactionManager) {
         /*事务管理规则，声明具备事务管理的方法名**/
         NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();

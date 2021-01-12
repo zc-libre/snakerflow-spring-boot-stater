@@ -15,10 +15,6 @@ public class SnakerFlowProperties {
      * 是否初始化数据库
      */
     private boolean autoInitSchema = Boolean.FALSE;
-    /**
-     * 是否开启事务
-     */
-    private boolean transactionEnabled = true;
 
     /**
      * 缓存实现类型
@@ -34,6 +30,7 @@ public class SnakerFlowProperties {
      * 决策表达式类型
      */
     private ExpressionType expressionType = ExpressionType.JUEL;
+
 
     public enum ExpressionType {
         /**
@@ -57,7 +54,9 @@ public class SnakerFlowProperties {
          * spring
          */
         SPRING,
-
+        /**
+         * mybatis-plus
+         */
         MYBATIS_PLUS
     }
 
