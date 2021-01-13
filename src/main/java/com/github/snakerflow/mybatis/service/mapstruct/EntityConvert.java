@@ -100,6 +100,17 @@ public interface EntityConvert {
     @Mapping(source = "result", target = "records")
     MpPage<Surrogate> toSurrogateMpPage(Page<Surrogate> page);
 
+    /**
+     * MpPage ===> page
+     * @param page /
+     * @return /
+     */
+    @Mapping(source = "current", target = "pageNo")
+    @Mapping(source = "current", target = "pageSize")
+    @Mapping(source = "total", target = "totalCount")
+    @Mapping(source = "records", target = "result")
+    Page<Surrogate> toSurrogatePage(MpPage<Surrogate> page);
+
 
     /**
      * Page ===> MpPage
@@ -131,6 +142,17 @@ public interface EntityConvert {
     MpPage<Order> toOrderMpPage(Page<Order> page);
 
     /**
+     * MpPage ===> page
+     * @param page /
+     * @return /
+     */
+    @Mapping(source = "current", target = "pageNo")
+    @Mapping(source = "current", target = "pageSize")
+    @Mapping(source = "total", target = "totalCount")
+    @Mapping(source = "records", target = "result")
+    Page<Order> toOrderPage(MpPage<Order> page);
+
+    /**
      * Page ===> MpPage
      * @param page /
      * @return /
@@ -142,6 +164,16 @@ public interface EntityConvert {
     MpPage<Task> toTaskMpPage(Page<Task> page);
 
     /**
+     * MpPage ===> page
+     * @param page /
+     * @return /
+     */
+    @Mapping(source = "current", target = "pageNo")
+    @Mapping(source = "current", target = "pageSize")
+    @Mapping(source = "total", target = "totalCount")
+    @Mapping(source = "records", target = "result")
+    Page<Task> toTaskPage(MpPage<Task> page);
+    /**
      * Page ===> MpPage
      * @param page /
      * @return /
@@ -152,6 +184,17 @@ public interface EntityConvert {
     @Mapping(source = "result", target = "records")
     MpPage<HistoryOrder> toHistoryOrderMpPage(Page<HistoryOrder> page);
 
+
+    /**
+     * MpPage ===> page
+     * @param page /
+     * @return /
+     */
+    @Mapping(source = "current", target = "pageNo")
+    @Mapping(source = "current", target = "pageSize")
+    @Mapping(source = "total", target = "totalCount")
+    @Mapping(source = "records", target = "result")
+    Page<HistoryOrder> toHistoryOrderPage(MpPage<HistoryOrder> page);
     /**
      * Page ===> MpPage
      * @param page /
@@ -162,6 +205,8 @@ public interface EntityConvert {
     @Mapping(source = "totalCount", target = "total")
     @Mapping(source = "result", target = "records")
     MpPage<HistoryTask> toHistoryTaskMpPage(Page<HistoryTask> page);
+
+
 
     /**
      * Page ===> MpPage
@@ -174,6 +219,8 @@ public interface EntityConvert {
     @Mapping(source = "result", target = "records")
     MpPage<WorkItem> toWorkItemTaskMpPage(Page<WorkItem> page);
 
+
+
     /**
      * Page ===> MpPage
      * @param page /
@@ -184,6 +231,17 @@ public interface EntityConvert {
     @Mapping(source = "totalCount", target = "total")
     @Mapping(source = "result", target = "records")
     MpPage<WorkItem> toWorkItemMpPage(Page<WorkItem> page);
+
+    /**
+     * MpPage ===> page
+     * @param page /
+     * @return /
+     */
+    @Mapping(source = "current", target = "pageNo")
+    @Mapping(source = "current", target = "pageSize")
+    @Mapping(source = "total", target = "totalCount")
+    @Mapping(source = "records", target = "result")
+    Page<WorkItem> toWorkItemPage(MpPage<WorkItem> page);
 
 
     HistoryTask toHistoryTask(HistTaskEntity histTaskEntity);

@@ -19,7 +19,7 @@
 
   <select id="findList" resultMap="BaseResultMap">
     select
-            id,name,display_Name,type,instance_Url,state, content, version,create_Time,creator
+            id,name,display_Name,type,instance_Url,state, content , version,create_Time,creator
     from
             wf_process
     <where>
@@ -58,6 +58,11 @@
   </select>
 
   <select id="findById" resultMap="BaseResultMap">
-    SELECT id,name,display_Name,type,instance_Url,state, content, version,create_Time,creator FROM wf_process WHERE id = #{id}
+    SELECT
+         id,name,display_Name,type,instance_Url,state, content, version,create_Time,creator
+    FROM
+         wf_process
+    WHERE
+         id = #{id}
   </select>
 </mapper>

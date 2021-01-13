@@ -7,4 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * @author zhaocheng
  */
 public class MpPage<T> extends Page<T> {
+
+
 }

@@ -13,6 +13,7 @@ import com.github.snakerflow.mybatis.entity.*;
 import com.github.snakerflow.mybatis.service.*;
 import com.github.snakerflow.mybatis.service.mapstruct.EntityConvert;
 import com.github.snakerflow.util.MpPage;
+import com.github.snakerflow.util.PageUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -359,51 +360,57 @@ public class MybatisPlusAccess implements DBAccess {
 
     @Override
     public List<Process> getProcesss(Page<Process> page, QueryFilter filter) {
-        MpPage<ProcessEntity> mpPage = entityConvert.toProcessMpPage(page);
-
-
+        MpPage<Process> mpPage = PageUtils.convertToMpPage(page);
+        PageUtils.convertToPage(page, mpPage);
         return snakerProcessService.findList(mpPage, filter);
     }
 
     @Override
     public List<Order> getActiveOrders(Page<Order> page, QueryFilter filter) {
-        MpPage<Order> mpPage = entityConvert.toOrderMpPage(page);
+        MpPage<Order> mpPage = PageUtils.convertToMpPage(page);
+        PageUtils.convertToPage(page, mpPage);
         return snakerOrderService.getActiveOrders(mpPage, filter);
     }
 
     @Override
     public List<Task> getActiveTasks(Page<Task> page, QueryFilter filter) {
-        MpPage<Task> mpPage = entityConvert.toTaskMpPage(page);
+        MpPage<Task> mpPage = PageUtils.convertToMpPage(page);
+        PageUtils.convertToPage(page, mpPage);
         return snakerTaskService.getActiveTasks(mpPage, filter);
     }
 
     @Override
     public List<HistoryOrder> getHistoryOrders(Page<HistoryOrder> page, QueryFilter filter) {
-        MpPage<HistoryOrder> mpPage = entityConvert.toHistoryOrderMpPage(page);
+        MpPage<HistoryOrder> mpPage = PageUtils.convertToMpPage(page);
+        PageUtils.convertToPage(page, mpPage);
         return snakerHistOrderService.getHistoryOrders(mpPage, filter);
     }
 
     @Override
     public List<HistoryTask> getHistoryTasks(Page<HistoryTask> page, QueryFilter filter) {
-        MpPage<HistoryTask> mpPage = entityConvert.toHistoryTaskMpPage(page);
+        MpPage<HistoryTask> mpPage = PageUtils.convertToMpPage(page);
+        PageUtils.convertToPage(page, mpPage);
         return snakerHistTaskService.getHistoryTasks(mpPage, filter);
     }
 
     @Override
     public List<WorkItem> getWorkItems(Page<WorkItem> page, QueryFilter filter) {
-        MpPage<WorkItem> mpPage = entityConvert.toWorkItemTaskMpPage(page);
+        MpPage<WorkItem> mpPage = PageUtils.convertToMpPage(page);
+        PageUtils.convertToPage(page, mpPage);
         return snakerTaskService.getWorkItems(mpPage, filter);
     }
 
     @Override
     public List<HistoryOrder> getCCWorks(Page<HistoryOrder> page, QueryFilter filter) {
-        MpPage<HistoryOrder> mpPage = entityConvert.toHistoryOrderMpPage(page);
+        MpPage<HistoryOrder> mpPage = PageUtils.convertToMpPage(page);
+        PageUtils.convertToPage(page, mpPage);
         return snakerHistOrderService.getCCWorks(mpPage, filter);
     }
 
     @Override
     public List<WorkItem> getHistoryWorkItems(Page<WorkItem> page, QueryFilter filter) {
-        MpPage<WorkItem> mpPage = entityConvert.toWorkItemMpPage(page);
+        MpPage<WorkItem> mpPage = PageUtils.convertToMpPage(page);
+        PageUtils.convertToPage(page, mpPage);
 
         return snakerHistTaskService.getHistoryWorkItems(mpPage, filter);
     }

@@ -34,10 +34,10 @@ public interface ProcessMapper extends BaseMapper<ProcessEntity> {
     Process findById(String id);
 
     /**
-     *
-     * @param page
-     * @param filter
-     * @return
+     * 分页条件查询
+     * @param page /
+     * @param filter /
+     * @return /
      */
-    List<Process> findList(Page<ProcessEntity> page, @Param("filter") QueryFilter filter);
+    List<Process> findList(Page<Process> page, @Param("filter") QueryFilter filter);
 }
