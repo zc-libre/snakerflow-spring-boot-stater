@@ -16,7 +16,11 @@ import java.util.List;
 public interface SnakerHistTaskService extends IService<HistTaskEntity>{
 
 
-    List<HistoryTask> getHistoryTasks(Page<HistoryTask> page, QueryFilter filter);
+    List<HistoryTask> getHistoryTasks(QueryFilter filter);
 
-    List<WorkItem> getHistoryWorkItems(Page<WorkItem> page, QueryFilter filter);
+    MpPage<HistoryTask> getHistoryTasks(Page<HistoryTask> page, QueryFilter filter);
+
+    List<WorkItem> getHistoryWorkItems(QueryFilter filter);
+
+    MpPage<WorkItem> getHistoryWorkItems(Page<WorkItem> page, QueryFilter filter);
 }

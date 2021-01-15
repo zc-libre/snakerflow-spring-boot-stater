@@ -29,4 +29,11 @@ public interface SnakerOrderService extends IService<OrderEntity>{
      * @return /
      */
     List<Order> getActiveOrders(Page<Order> mpPage, QueryFilter filter);
+
+    /**
+     * 查询流程实例
+     * @param filter /
+     * @return /
+     */
+    List<Order> getActiveOrders(QueryFilter filter);
 }

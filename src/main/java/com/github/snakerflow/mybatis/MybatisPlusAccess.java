@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author zhaocheng
@@ -360,6 +361,9 @@ public class MybatisPlusAccess implements DBAccess {
 
     @Override
     public List<Process> getProcesss(Page<Process> page, QueryFilter filter) {
+        if (Objects.isNull(page)) {
+            return snakerProcessService.findList(filter);
+        }
         MpPage<Process> mpPage = PageUtils.convertToMpPage(page);
         PageUtils.convertToPage(page, mpPage);
         return snakerProcessService.findList(mpPage, filter);
@@ -367,6 +371,9 @@ public class MybatisPlusAccess implements DBAccess {
 
     @Override
     public List<Order> getActiveOrders(Page<Order> page, QueryFilter filter) {
+        if (Objects.isNull(page)) {
+            return snakerOrderService.getActiveOrders(filter);
+        }
         MpPage<Order> mpPage = PageUtils.convertToMpPage(page);
         PageUtils.convertToPage(page, mpPage);
         return snakerOrderService.getActiveOrders(mpPage, filter);
@@ -374,59 +381,85 @@ public class MybatisPlusAccess implements DBAccess {
 
     @Override
     public List<Task> getActiveTasks(Page<Task> page, QueryFilter filter) {
+        if (Objects.isNull(page)) {
+           return snakerTaskService.getActiveTasks(filter);
+        }
+
         MpPage<Task> mpPage = PageUtils.convertToMpPage(page);
+        mpPage = snakerTaskService.getActiveTasks(mpPage, filter);
         PageUtils.convertToPage(page, mpPage);
-        return snakerTaskService.getActiveTasks(mpPage, filter);
+        return mpPage.getRecords();
     }
+
+
 
     @Override
     public List<HistoryOrder> getHistoryOrders(Page<HistoryOrder> page, QueryFilter filter) {
+        if (Objects.isNull(page)) {
+            return snakerHistOrderService.getHistoryOrders(filter);
+        }
         MpPage<HistoryOrder> mpPage = PageUtils.convertToMpPage(page);
+        mpPage = snakerHistOrderService.getHistoryOrders(mpPage, filter);
         PageUtils.convertToPage(page, mpPage);
-        return snakerHistOrderService.getHistoryOrders(mpPage, filter);
+        return mpPage.getRecords();
     }
 
     @Override
     public List<HistoryTask> getHistoryTasks(Page<HistoryTask> page, QueryFilter filter) {
+        if (Objects.isNull(page)) {
+            return snakerHistTaskService.getHistoryTasks(filter);
+        }
         MpPage<HistoryTask> mpPage = PageUtils.convertToMpPage(page);
+        snakerHistTaskService.getHistoryTasks(mpPage, filter);
         PageUtils.convertToPage(page, mpPage);
-        return snakerHistTaskService.getHistoryTasks(mpPage, filter);
+        return mpPage.getRecords();
     }
 
     @Override
     public List<WorkItem> getWorkItems(Page<WorkItem> page, QueryFilter filter) {
-        MpPage<WorkItem> mpPage = PageUtils.convertToMpPage(page);
-        PageUtils.convertToPage(page, mpPage);
-        return snakerTaskService.getWorkItems(mpPage, filter);
+        if (Objects.isNull(page)) {
+            return snakerTaskService.getWorkItems(filter);
+        }
+         MpPage<WorkItem> mpPage = PageUtils.convertToMpPage(page);
+         mpPage = snakerTaskService.getWorkItems(mpPage, filter);
+         PageUtils.convertToPage(page, mpPage);
+        return mpPage.getRecords();
     }
 
     @Override
     public List<HistoryOrder> getCCWorks(Page<HistoryOrder> page, QueryFilter filter) {
+        if (Objects.isNull(page)) {
+            return snakerHistOrderService.getCCWorks(filter);
+        }
         MpPage<HistoryOrder> mpPage = PageUtils.convertToMpPage(page);
+        mpPage = snakerHistOrderService.getCCWorks(mpPage, filter);
         PageUtils.convertToPage(page, mpPage);
-        return snakerHistOrderService.getCCWorks(mpPage, filter);
+        return mpPage.getRecords();
     }
 
     @Override
     public List<WorkItem> getHistoryWorkItems(Page<WorkItem> page, QueryFilter filter) {
+        if (Objects.isNull(page)) {
+            return snakerHistTaskService.getHistoryWorkItems(filter);
+        }
         MpPage<WorkItem> mpPage = PageUtils.convertToMpPage(page);
+        mpPage = snakerHistTaskService.getHistoryWorkItems(mpPage, filter);
         PageUtils.convertToPage(page, mpPage);
-
-        return snakerHistTaskService.getHistoryWorkItems(mpPage, filter);
+        return mpPage.getRecords();
     }
 
     @Override
-    public <T> T queryObject(Class<T> aClass, String s, Object... objects) {
+    public <T> T queryObject(Class<T> clazz, String sql, Object... objects) {
         return null;
     }
 
     @Override
-    public <T> List<T> queryList(Class<T> aClass, String s, Object... objects) {
+    public <T> List<T> queryList(Class<T> clazz, String sql, Object... objects) {
         return null;
     }
 
     @Override
-    public <T> List<T> queryList(Page<T> page, QueryFilter queryFilter, Class<T> aClass, String s, Object... objects) {
+    public <T> List<T> queryList(Page<T> page, QueryFilter queryFilter, Class<T> clazz, String s, Object... objects) {
         return null;
     }
 

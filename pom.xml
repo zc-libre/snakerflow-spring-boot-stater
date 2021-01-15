@@ -3,10 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.2.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
     </parent>
 
     <groupId>com.github.snakerflow</groupId>
@@ -15,12 +14,53 @@
     <name>snakerflow-spring-boot-stater</name>
     <description>Demo project for Spring Boot</description>
 
+
+    <developers>
+        <developer>
+            <name>libre</name>
+            <email>zc150622@gmail.com</email>
+            <timezone>8</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>snakerflow-spring-boot-stater</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>git@github.com:zc-libre/snakerflow-spring-boot-stater.git</url>
+        <connection>scm:git:git@github.com:zc-libre/snakerflow-spring-boot-stater.git</connection>
+        <developerConnection>scm:git:git@github.com:zc-libre/snakerflow-spring-boot-stater.git</developerConnection>
+    </scm>
+
     <properties>
         <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <snaker.version>2.5.1</snaker.version>
         <mysql.version>8.0.21</mysql.version>
+        <spring.boot.version>2.3.2.RELEASE</spring.boot.version>
         <mybatis.plus.version>3.4.0</mybatis.plus.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -110,44 +150,77 @@
         </dependency>
     </dependencies>
 
-    <build>
-       <plugins>
-           <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-source-plugin</artifactId>
-               <executions>
-                   <execution>
-                       <id>attach-sources</id>
-                       <goals>
-                           <goal>jar</goal>
-                       </goals>
-                   </execution>
-               </executions>
-           </plugin>
-           <!-- Javadoc -->
-           <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-javadoc-plugin</artifactId>
-               <version>2.9.1</version>
-               <configuration>
-                   <show>private</show>
-                   <nohelp>true</nohelp>
-                   <charset>UTF-8</charset>
-                   <encoding>UTF-8</encoding>
-                   <docencoding>UTF-8</docencoding>
-                   <additionalparam>-Xdoclint:none</additionalparam>
-                   <detectJavaApiLink>false</detectJavaApiLink>
-               </configuration>
-               <executions>
-                   <execution>
-                       <phase>package</phase>
-                       <goals>
-                           <goal>jar</goal>
-                       </goals>
-                   </execution>
-               </executions>
-           </plugin>
-       </plugins>
-    </build>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <properties>
+                <gpg.passphrase>504879189</gpg.passphrase>
+            </properties>
+            <build>
+                <plugins>
+                    <!-- Source -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <configuration>
+                            <show>private</show>
+                            <nohelp>true</nohelp>
+                            <charset>UTF-8</charset>
+                            <encoding>UTF-8</encoding>
+                            <docencoding>UTF-8</docencoding>
+                            <additionalparam>-Xdoclint:none</additionalparam>  <!-- TODO 临时解决不规范的javadoc生成报错,后面要规范化后把这行去掉 -->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- GPG -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>

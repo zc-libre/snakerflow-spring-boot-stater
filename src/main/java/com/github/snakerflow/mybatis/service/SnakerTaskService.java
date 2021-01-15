@@ -44,8 +44,23 @@ public interface SnakerTaskService extends IService<TaskEntity>{
      * @param filter /
      * @return /
      */
-    List<Task> getActiveTasks(Page<Task> page, QueryFilter filter);
+    MpPage<Task> getActiveTasks(Page<Task> page, QueryFilter filter);
 
+    List<Task> getActiveTasks(QueryFilter filter);
 
-    List<WorkItem> getWorkItems(Page<WorkItem> page, QueryFilter filter);
+    /**
+     * 获取代办列表
+
+     * @param filter /
+     * @return /
+     */
+    List<WorkItem> getWorkItems( QueryFilter filter);
+
+    /**
+     * 获取代办列表
+     * @param page /
+     * @param filter /
+     * @return /
+     */
+    MpPage<WorkItem> getWorkItems(Page<WorkItem> page, QueryFilter filter);
 }

@@ -22,7 +22,7 @@
     parent_Id, order_No, `variable`
   </sql>
 
-  <select id="findListPage" resultType="org.snaker.engine.entity.HistoryOrder">
+  <select id="findList" resultType="org.snaker.engine.entity.HistoryOrder">
     select
             o.id,o.process_Id,o.order_State,o.priority,o.creator,o.create_Time,o.end_Time,o.parent_Id,o.expire_Time,o.order_No,o.variable
     from

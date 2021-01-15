@@ -8,8 +8,9 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
-    * 流程实例表
-    */
+ * 流程实例表
+ * @author zhao.cheng
+ */
 @Data
 @TableName(value = "wf_order")
 public class OrderEntity implements Serializable {

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.snakerflow.mybatis.mapper.TaskMapper;
 import com.github.snakerflow.mybatis.entity.TaskEntity;
 import com.github.snakerflow.mybatis.service.SnakerTaskService;
+import com.github.snakerflow.util.MpPage;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.WorkItem;
@@ -33,12 +34,22 @@ public class SnakerTaskServiceImpl extends ServiceImpl<TaskMapper, TaskEntity> i
     }
 
     @Override
-    public List<Task> getActiveTasks(Page<Task> page, QueryFilter filter) {
+    public MpPage<Task> getActiveTasks(Page<Task> page, QueryFilter filter) {
         return baseMapper.findActiveTasks(page, filter);
     }
 
     @Override
-    public List<WorkItem> getWorkItems(Page<WorkItem> page, QueryFilter filter) {
+    public List<Task> getActiveTasks(QueryFilter filter) {
+        return baseMapper.findActiveTasks(filter);
+    }
+
+    @Override
+    public List<WorkItem> getWorkItems(QueryFilter filter) {
+        return baseMapper.findWorkItems(filter);
+    }
+
+    @Override
+    public MpPage<WorkItem> getWorkItems(Page<WorkItem> page, QueryFilter filter) {
         return baseMapper.findWorkItems(page, filter);
     }
 }

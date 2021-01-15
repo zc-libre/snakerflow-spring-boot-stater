@@ -3,6 +3,7 @@ package com.github.snakerflow.mybatis.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.snakerflow.mybatis.entity.TaskEntity;
+import com.github.snakerflow.util.MpPage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -44,18 +45,28 @@ public interface TaskMapper extends BaseMapper<TaskEntity> {
     List<Task> findTaskList(@Param("orderId") String orderId, @Param("taskName") String taskName, @Param("parentTaskId") String parentTaskId);
 
     /**
+     * 条件查询
+     * @param filter /
+     * @return /
+     */
+    List<Task> findActiveTasks(@Param("filter") QueryFilter filter);
+    /**
      * findActiveTasks
      * @param page /
      * @param filter /
      * @return /
      */
-    List<Task> findActiveTasks(Page<Task> page, @Param("filter") QueryFilter filter);
+    MpPage<Task> findActiveTasks(Page<Task> page, @Param("filter") QueryFilter filter);
 
+
+
+
+    List<WorkItem> findWorkItems(@Param("filter")QueryFilter filter);
     /**
      *
      * @param page
      * @param filter
      * @return
      */
-    List<WorkItem> findWorkItems(Page<WorkItem> page, @Param("filter")QueryFilter filter);
+    MpPage<WorkItem> findWorkItems(Page<WorkItem> page, @Param("filter")QueryFilter filter);
 }

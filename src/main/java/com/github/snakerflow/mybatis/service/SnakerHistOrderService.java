@@ -16,7 +16,11 @@ public interface SnakerHistOrderService extends IService<HistOrderEntity>{
 
 
 
-    List<HistoryOrder> getHistoryOrders(Page<HistoryOrder> page, QueryFilter filter);
+    List<HistoryOrder> getHistoryOrders( QueryFilter filter);
 
-    List<HistoryOrder> getCCWorks(Page<HistoryOrder> page, QueryFilter filter);
+    MpPage<HistoryOrder> getHistoryOrders(Page<HistoryOrder> page, QueryFilter filter);
+
+    List<HistoryOrder> getCCWorks(QueryFilter filter);
+
+    MpPage<HistoryOrder> getCCWorks(Page<HistoryOrder> page, QueryFilter filter);
 }

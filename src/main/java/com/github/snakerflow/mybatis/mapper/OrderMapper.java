@@ -24,6 +24,13 @@ public interface OrderMapper extends BaseMapper<OrderEntity> {
     @Select("select o.id,o.process_Id,o.creator,o.create_Time,o.parent_Id,o.parent_Node_Name,o.expire_Time,o.last_Update_Time,o.last_Updator,o.priority,o.order_No,o.variable, o.version from wf_order o where id = #{orderId}")
     Order findById(String orderId);
 
+
+    /**
+     * 获取活动的流程实例
+     * @param filter /
+     * @return /
+     */
+    List<Order> findActiveOrders(@Param("filter") QueryFilter filter);
     /**
      * 获取活动的流程实例
      * @param page /

@@ -2,6 +2,8 @@ package com.github.snakerflow.util;
 
 import org.snaker.engine.access.Page;
 
+import java.util.Objects;
+
 /**
  * @author zhao.cheng
  * @date 2021/1/13 14:04
@@ -9,6 +11,7 @@ import org.snaker.engine.access.Page;
 public class PageUtils {
 
     public static <T> MpPage<T> convertToMpPage(Page<T> page) {
+
         MpPage<T> mpPage = new MpPage<>();
         mpPage.setCurrent(page.getPageNo());
         mpPage.setSize(page.getPageSize());

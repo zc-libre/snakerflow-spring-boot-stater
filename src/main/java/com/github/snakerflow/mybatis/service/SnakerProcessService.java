@@ -30,6 +30,12 @@ public interface SnakerProcessService extends IService<ProcessEntity>{
 
 
     /**
+     * 条件查询
+     * @param filter /
+     * @return /
+     */
+    List<Process> findList( QueryFilter filter);
+    /**
      * 分页条件查询
      * @param page /
      * @param filter /

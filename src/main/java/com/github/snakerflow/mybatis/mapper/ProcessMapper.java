@@ -35,6 +35,14 @@ public interface ProcessMapper extends BaseMapper<ProcessEntity> {
 
     /**
      * 分页条件查询
+
+     * @param filter /
+     * @return /
+     */
+    List<Process> findList( @Param("filter") QueryFilter filter);
+
+    /**
+     * 分页条件查询
      * @param page /
      * @param filter /
      * @return /

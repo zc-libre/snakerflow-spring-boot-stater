@@ -27,6 +27,11 @@ public class SnakerProcessServiceImpl extends ServiceImpl<ProcessMapper, Process
     }
 
     @Override
+    public List<Process> findList(QueryFilter filter) {
+        return baseMapper.findList(filter);
+    }
+
+    @Override
     public List<Process> findList(Page<Process> page, QueryFilter filter) {
         return baseMapper.findList(page, filter);
     }

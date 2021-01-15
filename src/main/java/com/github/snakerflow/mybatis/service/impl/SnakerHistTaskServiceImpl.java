@@ -19,12 +19,22 @@ import java.util.List;
 public class SnakerHistTaskServiceImpl extends ServiceImpl<HistTaskMapper, HistTaskEntity> implements SnakerHistTaskService {
 
     @Override
-    public List<HistoryTask> getHistoryTasks(Page<HistoryTask> page, QueryFilter filter) {
+    public List<HistoryTask> getHistoryTasks(QueryFilter filter) {
+        return baseMapper.findListPage(filter);
+    }
+
+    @Override
+    public MpPage<HistoryTask> getHistoryTasks(Page<HistoryTask> page, QueryFilter filter) {
         return baseMapper.findListPage(page, filter);
     }
 
     @Override
-    public List<WorkItem> getHistoryWorkItems(Page<WorkItem> page, QueryFilter filter) {
+    public MpPage<WorkItem> getHistoryWorkItems(QueryFilter filter) {
+        return baseMapper.findHistoryWorkItems(filter);
+    }
+
+    @Override
+    public MpPage<WorkItem> getHistoryWorkItems(Page<WorkItem> page, QueryFilter filter) {
         return baseMapper.findHistoryWorkItems(page, filter);
     }
 }

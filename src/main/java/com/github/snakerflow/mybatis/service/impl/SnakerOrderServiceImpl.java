@@ -25,4 +25,9 @@ public class SnakerOrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity
     public List<Order> getActiveOrders(Page<Order> page, QueryFilter filter) {
         return baseMapper.findActiveOrders(page, filter);
     }
+
+    @Override
+    public List<Order> getActiveOrders(QueryFilter filter) {
+        return  baseMapper.findActiveOrders(filter);
+    }
 }

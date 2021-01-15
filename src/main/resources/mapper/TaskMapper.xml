@@ -28,38 +28,7 @@
     <sql id="selectActiveTasksPart">
         select id,order_Id,task_Name,display_Name,task_Type,perform_Type,operator,create_Time,finish_Time,expire_Time,action_Url,parent_Task_Id,variable, version from wf_task
     </sql>
-    <sql id="fromWorkItemsPart">
-        from wf_task t
-        left join wf_order o on t.order_id = o.id
-        left join wf_task_actor ta on ta.task_id=t.id
-        left join wf_process p on p.id = o.process_id
-        <where>
-            <if test="processId != null">
-                and o.process_Id = #{processId, jdbcType=VARCHAR}
-            </if>
-            <if test="actorIds != null and actorIds.length > 0">
-                and ta.actor_Id in
-                <foreach collection="actorIds" index="index" item="item" open="(" separator="," close=")">
-                    #{item, jdbcType=VARCHAR}
-                </foreach>
-            </if>
-            <if test="createTimeStart != null">
-                and t.create_Time &gt;= #{createTimeStart, jdbcType=VARCHAR}
-            </if>
-            <if test="createTimeEnd != null">
-                and t.create_Time &lt;= #{createTimeEnd, jdbcType=VARCHAR}
-            </if>
-            <if test="parentId != null">
-                and o.parent_Id = #{parentId, jdbcType=VARCHAR}
-            </if>
-            <if test="taskType != null">
-                and t.task_Type = #{taskType, jdbcType=NUMERIC}
-            </if>
-            <if test="performType != null">
-                and t.perform_Type = #{performType, jdbcType=NUMERIC}
-            </if>
-        </where>
-    </sql>
+
 
   <select id="findTaskList" resultType="org.snaker.engine.entity.Task">
     select
@@ -125,7 +94,6 @@
                  </if>
              </if>
           </where>
-
   </select>
 
   <select id="findWorkItems" resultType="org.snaker.engine.entity.WorkItem">
