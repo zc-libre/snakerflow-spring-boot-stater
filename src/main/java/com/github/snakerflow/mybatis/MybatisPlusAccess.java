@@ -1,33 +1,36 @@
 package com.github.snakerflow.mybatis;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.snakerflow.mybatis.entity.*;
 import com.github.snakerflow.mybatis.service.*;
 import com.github.snakerflow.mybatis.service.mapstruct.EntityConvert;
+import com.github.snakerflow.prop.SnakerFlowProperties;
 import com.github.snakerflow.util.MpPage;
 import com.github.snakerflow.util.PageUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.snaker.engine.DBAccess;
+import org.snaker.engine.SnakerException;
 import org.snaker.engine.access.Page;
 import org.snaker.engine.access.QueryFilter;
+import org.snaker.engine.access.ScriptRunner;
+import org.snaker.engine.access.jdbc.JdbcHelper;
 import org.snaker.engine.entity.*;
 import org.snaker.engine.entity.Process;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * @author zhaocheng
@@ -38,6 +41,8 @@ import java.util.Optional;
 @SuppressWarnings("unchecked")
 public class MybatisPlusAccess implements DBAccess {
 
+    private final SnakerFlowProperties properties;
+    private final DataSource dataSource;
     private SnakerProcessService snakerProcessService;
     private SnakerOrderService snakerOrderService;
     private SnakerHistOrderService snakerHistOrderService;
@@ -47,8 +52,12 @@ public class MybatisPlusAccess implements DBAccess {
     private SnakerHistTaskService snakerHistTaskService;
     private SnakerHistTaskActorService histTaskActorService;
     private SnakerSurrogateService snakerSurrogateService;
-
     private EntityConvert entityConvert;
+
+    public MybatisPlusAccess(SnakerFlowProperties properties, DataSource dataSource) {
+        this.properties = properties;
+        this.dataSource = dataSource;
+    }
 
     @Override
     public void initialize(Object o) {
@@ -463,8 +472,32 @@ public class MybatisPlusAccess implements DBAccess {
         return null;
     }
 
+
+
     @Override
     public void runScript() {
-
+        if (!properties.isAutoInitSchema()) {
+            return;
+        }
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+            if(JdbcHelper.isExec(conn)) {
+                log.info("script has completed execution.skip this step");
+                return;
+            }
+            String databaseType = JdbcHelper.getDatabaseType(conn);
+            String schema = "db/schema-" + databaseType + ".sql";
+            ScriptRunner runner = new ScriptRunner(conn, true);
+            runner.runScript(schema);
+        } catch (Exception e) {
+            throw new SnakerException(e);
+        } finally {
+            try {
+                JdbcHelper.close(conn);
+            } catch (SQLException e) {
+                //ignore
+            }
+        }
     }
 }

@@ -96,7 +96,7 @@ public class SnakerFlowAutoConfiguration {
     }
 
     @Bean("memoryCacheManager")
-    @ConditionalOnProperty(prefix = "snaker.flow", name = "cache-type", havingValue = "memory", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "snaker.flow.cache", name = "cache-type", havingValue = "memory", matchIfMissing = true)
     public CacheManager memoryCacheManager() {
         log.info("获取到缓存使用类型: memory");
         return new MemoryCacheManager();
@@ -105,15 +105,15 @@ public class SnakerFlowAutoConfiguration {
 
     @Bean("redisCacheManager")
     @ConditionalOnBean(RedisTemplate.class)
-    @ConditionalOnProperty(prefix = "snaker.flow", name = "cache-type", havingValue = "redis")
-    public CacheManager redisCacheManager(RedisTemplate<String, Object> redisTemplate) {
+    @ConditionalOnProperty(prefix = "snaker.flow.cache", name = "cache-type", havingValue = "redis")
+    public CacheManager redisCacheManager(RedisTemplate<String, Object> redisTemplate, SnakerFlowProperties properties) {
         log.info("获取到缓存使用类型: redis");
-        return new SnakerRedisCacheManager(redisTemplate);
+        return new SnakerRedisCacheManager(redisTemplate,properties);
     }
 
 
     @Bean("ehCacheManager")
-    @ConditionalOnProperty(prefix = "snaker.flow", name = "cache-type", havingValue = "ehcache")
+    @ConditionalOnProperty(prefix = "snaker.flow.cache", name = "cache-type", havingValue = "ehcache")
     public CacheManager ehCacheManager() {
         log.info("获取到缓存使用类型: ehcache");
         return new EhCacheManager();

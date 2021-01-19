@@ -1,5 +1,6 @@
 package com.github.snakerflow.cache;
 
+import com.github.snakerflow.prop.SnakerFlowProperties;
 import org.snaker.engine.cache.Cache;
 import org.snaker.engine.cache.CacheException;
 import org.snaker.engine.cache.CacheManager;
@@ -18,10 +19,12 @@ public class SnakerRedisCacheManager implements CacheManager {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final ConcurrentMap<String, Cache> caches;
+    private final SnakerFlowProperties snakerFlowProperties;
 
-    public SnakerRedisCacheManager(RedisTemplate<String, Object> redisTemplate) {
-        this.caches = new ConcurrentHashMap<String, Cache>();
+    public SnakerRedisCacheManager(RedisTemplate<String, Object> redisTemplate, SnakerFlowProperties snakerFlowProperties) {
         this.redisTemplate = redisTemplate;
+        this.caches = new ConcurrentHashMap<>();
+        this.snakerFlowProperties = snakerFlowProperties;
     }
 
     @Override
@@ -33,7 +36,7 @@ public class SnakerRedisCacheManager implements CacheManager {
         cache = caches.get(name);
 
         if (cache == null) {
-            cache = new RedisCache(redisTemplate);
+            cache = new RedisCache(redisTemplate, snakerFlowProperties);
             Cache existing = caches.putIfAbsent(name, cache);
             if (existing != null) {
                 cache = existing;

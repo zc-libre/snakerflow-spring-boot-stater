@@ -1,20 +1,19 @@
 package com.github.snakerflow.config;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.snakerflow.mybatis.MybatisPlusAccess;
-import com.github.snakerflow.mybatis.mapper.ProcessMapper;
 import com.github.snakerflow.mybatis.service.*;
 import com.github.snakerflow.mybatis.service.impl.*;
 import com.github.snakerflow.mybatis.service.mapstruct.EntityConvert;
+import com.github.snakerflow.prop.SnakerFlowProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.snaker.engine.DBAccess;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 /**
  * @author zhao.cheng
@@ -23,10 +22,13 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 @ConditionalOnProperty(prefix = "snaker.flow", name = "db-access-type", havingValue = "mybatis_plus")
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class SnakerMybatisPlusAutoConfiguration {
 
     @Bean
-    public DBAccess mybatisPlusDBAccess(SnakerProcessService snakerProcessService,
+    public DBAccess mybatisPlusDBAccess(SnakerFlowProperties properties,
+                                        DataSource dataSource,
+                                        SnakerProcessService snakerProcessService,
                                         SnakerOrderService snakerOrderService,
                                         SnakerHistOrderService snakerHistOrderService,
                                         SnakerCcOrderService snakerCcOrderService,
@@ -37,7 +39,7 @@ public class SnakerMybatisPlusAutoConfiguration {
                                         SnakerSurrogateService snakerSurrogateService) {
         log.info("获取到数据库连接类型: mybatis-plus");
 
-        MybatisPlusAccess access = new MybatisPlusAccess();
+        MybatisPlusAccess access = new MybatisPlusAccess(properties,dataSource);
         access.setSnakerProcessService(snakerProcessService);
         access.setSnakerOrderService(snakerOrderService);
         access.setSnakerCcOrderService(snakerCcOrderService);

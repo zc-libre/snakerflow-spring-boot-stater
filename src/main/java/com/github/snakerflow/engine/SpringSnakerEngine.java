@@ -14,6 +14,7 @@
  */
 package com.github.snakerflow.engine;
 
+import org.snaker.engine.DBAccess;
 import org.snaker.engine.core.SnakerEngineImpl;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -39,7 +40,9 @@ public class SpringSnakerEngine extends SnakerEngineImpl implements Initializing
             configuration.initProperties(properties);
         }
         configuration.parser();
-	}
+        DBAccess dbAccess = applicationContext.getBean(DBAccess.class);
+        dbAccess.runScript();
+    }
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
