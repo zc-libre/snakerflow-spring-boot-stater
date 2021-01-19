@@ -38,7 +38,7 @@ public interface HistTaskMapper extends BaseMapper<HistTaskEntity> {
      * @param filter /
      * @return /
      */
-    MpPage<WorkItem> findHistoryWorkItems(@Param("filter")QueryFilter filter);
+    List<WorkItem> findHistoryWorkItems(@Param("filter")QueryFilter filter);
     /**
      * 分页条件查询
      * @param page /

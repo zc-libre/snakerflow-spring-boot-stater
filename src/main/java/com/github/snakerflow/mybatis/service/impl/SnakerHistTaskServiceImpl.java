@@ -29,7 +29,7 @@ public class SnakerHistTaskServiceImpl extends ServiceImpl<HistTaskMapper, HistT
     }
 
     @Override
-    public MpPage<WorkItem> getHistoryWorkItems(QueryFilter filter) {
+    public List<WorkItem> getHistoryWorkItems(QueryFilter filter) {
         return baseMapper.findHistoryWorkItems(filter);
     }
 

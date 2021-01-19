@@ -54,8 +54,6 @@ public class SnakerFlowAutoConfiguration {
         return snakerEngine;
     }
 
-
-
     @Bean
     @ConditionalOnMissingBean
     public IProcessService processService(DBAccess dbAccess, CacheManager cacheManager) {

@@ -35,9 +35,12 @@ public class EhCache<K, V> implements Cache<K, V> {
 		this.cache = cache;
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
+    @SuppressWarnings("unchecked")
 	public V get(K key) throws CacheException {
-		if(key == null) return null;
+		if(key == null) {
+            return null;
+        }
         try {
             Element element = cache.get(key);
             if (element == null) {
@@ -50,7 +53,8 @@ public class EhCache<K, V> implements Cache<K, V> {
         }
 	}
 
-	public V put(K key, V value) throws CacheException {
+	@Override
+    public V put(K key, V value) throws CacheException {
         try {
             V previous = get(key);
             Element element = new Element(key, value);
