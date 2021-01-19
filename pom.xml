@@ -10,7 +10,7 @@
 
     <groupId>com.github.zc-libre</groupId>
     <artifactId>snakerflow-spring-boot-stater</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <name>snakerflow-spring-boot-stater</name>
     <description>snakerflow-spring-boot-stater</description>
 
@@ -47,6 +47,9 @@
         <mysql.version>8.0.21</mysql.version>
         <spring.boot.version>2.3.2.RELEASE</spring.boot.version>
         <mybatis.plus.version>3.4.0</mybatis.plus.version>
+        <juel.version>2.1.2</juel.version>
+        <hutool.version>5.5.6</hutool.version>
+        <mapstruct.version>1.4.1.Final</mapstruct.version>
     </properties>
 
     <dependencyManagement>
@@ -71,36 +74,40 @@
                     <groupId>org.springframework.boot</groupId>
                 </exclusion>
             </exclusions>
+            <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
+            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
+            <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>commons-dbutils</groupId>
-            <artifactId>commons-dbutils</artifactId>
-            <version>1.7</version>
-        </dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus</artifactId>
             <version>${mybatis.plus.version}</version>
             <scope>provided</scope>
-
         </dependency>
+
         <dependency>
             <groupId>com.github.snakerflow</groupId>
             <artifactId>snaker-core</artifactId>
             <version>${snaker.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -110,17 +117,21 @@
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>de.odysseus.juel</groupId>
             <artifactId>juel</artifactId>
-            <version>2.1.2</version>
+            <version>${juel.version}</version>
+            <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -130,22 +141,26 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.5.6</version>
+            <version>${hutool.version}</version>
+            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-jdk8</artifactId>
-            <version>1.4.1.Final</version>
+            <version>${mapstruct.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.4.1.Final</version>
+            <version>${mapstruct.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
-            <version>1.4.1.Final</version>
+            <version>${mapstruct.version}</version>
         </dependency>
     </dependencies>
 
