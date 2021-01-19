@@ -11,4 +11,24 @@ Snaker是一个基于Java的轻量级工作流引擎，适用于企业应用中�
 
 **灵巧**: 暴露大量可扩展接口，支持流程设计器、流程引擎的组件模型自定义
 
+## 1. 快速开始
+
+该项目已同步至maven中央仓库
+
+### 1.1 引入依赖
+
+```
+    <dependency>
+            <groupId>com.github.zc-libre</groupId>
+            <artifactId>snakerflow-spring-boot-stater</artifactId>
+            <version>2.0.0</version>
+    </dependency>
+```
+
+### 1.2 配置
+
+TBD
+
+
+
 有问题欢迎交流，本项目对你有用的话，欢迎star。
