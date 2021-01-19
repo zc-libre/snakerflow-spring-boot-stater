@@ -3,6 +3,7 @@ package com.github.snakerflow.mybatis.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.snakerflow.mybatis.entity.ProcessEntity;
+import com.github.snakerflow.util.MpPage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -39,7 +40,7 @@ public interface ProcessMapper extends BaseMapper<ProcessEntity> {
      * @param filter /
      * @return /
      */
-    List<Process> findList( @Param("filter") QueryFilter filter);
+   List<Process> findList( @Param("filter") QueryFilter filter);
 
     /**
      * 分页条件查询
@@ -47,5 +48,5 @@ public interface ProcessMapper extends BaseMapper<ProcessEntity> {
      * @param filter /
      * @return /
      */
-    List<Process> findList(Page<Process> page, @Param("filter") QueryFilter filter);
+    MpPage<Process> findList(Page<Process> page, @Param("filter") QueryFilter filter);
 }

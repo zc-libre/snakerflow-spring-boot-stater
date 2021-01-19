@@ -3,6 +3,7 @@ package com.github.snakerflow.mybatis.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.snakerflow.mybatis.entity.OrderEntity;
+import com.github.snakerflow.util.MpPage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -37,5 +38,5 @@ public interface OrderMapper extends BaseMapper<OrderEntity> {
      * @param filter /
      * @return /
      */
-    List<Order> findActiveOrders(Page<Order> page, @Param("filter") QueryFilter filter);
+    MpPage<Order> findActiveOrders(Page<Order> page, @Param("filter") QueryFilter filter);
 }

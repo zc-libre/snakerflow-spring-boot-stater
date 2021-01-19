@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.snakerflow.mybatis.entity.SurrogateEntity;
+import com.github.snakerflow.util.MpPage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Surrogate;
 
 import java.util.List;
@@ -39,4 +41,19 @@ public interface SurrogateMapper extends BaseMapper<SurrogateEntity> {
      */
     @Select("select id, process_Name, operator, surrogate, odate, sdate, edate, state from wf_surrogate ${ew.customSqlSegment}")
     List<Surrogate> findOne(Page page, @Param(WRAPPER)Wrapper<SurrogateEntity> wrapper);
+
+    /**
+     * 条件查询
+     * @param filter /
+     * @return /
+     */
+  //  List<Surrogate> findList(QueryFilter filter);
+
+    /**
+     * 分页条件查询
+     * @param mpPage /
+     * @param filter /
+     * @return /
+     */
+    MpPage<Surrogate> findList(MpPage<Surrogate> mpPage, @Param("filter") QueryFilter filter);
 }

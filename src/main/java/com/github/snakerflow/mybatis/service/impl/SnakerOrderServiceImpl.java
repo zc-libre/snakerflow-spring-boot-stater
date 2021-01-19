@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.snakerflow.mybatis.entity.OrderEntity;
 import com.github.snakerflow.mybatis.mapper.OrderMapper;
 import com.github.snakerflow.mybatis.service.SnakerOrderService;
+import com.github.snakerflow.util.MpPage;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Order;
 
@@ -22,7 +23,7 @@ public class SnakerOrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity
     }
 
     @Override
-    public List<Order> getActiveOrders(Page<Order> page, QueryFilter filter) {
+    public MpPage<Order> getActiveOrders(Page<Order> page, QueryFilter filter) {
         return baseMapper.findActiveOrders(page, filter);
     }
 

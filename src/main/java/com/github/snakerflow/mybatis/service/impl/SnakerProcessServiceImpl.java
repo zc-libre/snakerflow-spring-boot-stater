@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.snakerflow.mybatis.entity.ProcessEntity;
 import com.github.snakerflow.mybatis.mapper.ProcessMapper;
 import com.github.snakerflow.mybatis.service.SnakerProcessService;
+import com.github.snakerflow.util.MpPage;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Process;
 
@@ -32,7 +33,7 @@ public class SnakerProcessServiceImpl extends ServiceImpl<ProcessMapper, Process
     }
 
     @Override
-    public List<Process> findList(Page<Process> page, QueryFilter filter) {
+    public MpPage<Process> findList(Page<Process> page, QueryFilter filter) {
         return baseMapper.findList(page, filter);
     }
 }

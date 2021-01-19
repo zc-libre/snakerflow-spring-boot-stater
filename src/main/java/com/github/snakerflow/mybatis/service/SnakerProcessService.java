@@ -41,5 +41,5 @@ public interface SnakerProcessService extends IService<ProcessEntity>{
      * @param filter /
      * @return /
      */
-    List<Process> findList(Page<Process> page, QueryFilter filter);
+    MpPage<Process> findList(Page<Process> page, QueryFilter filter);
 }

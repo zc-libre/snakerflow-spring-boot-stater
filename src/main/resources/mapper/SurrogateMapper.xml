@@ -17,4 +17,35 @@
     <!--@mbg.generated-->
     id, process_Name, `operator`, surrogate, odate, sdate, edate, `state`
   </sql>
+
+  <select id="findList" resultType="org.snaker.engine.entity.Surrogate">
+    SELECT
+            id, process_Name, operator, surrogate, odate, sdate, edate, state
+    FROM
+            wf_surrogate
+    <where>
+       state = 1
+      <if test="filter != null ">
+        <if test="filter.names != null and filter.names.length != 0">
+          and process_Name in
+          <foreach collection="filter.names" index="index" item="processName" open="(" close=")" separator=",">
+            #{processName,jdbcType=VARCHAR}
+          </foreach>
+        </if>
+        <if test="filter.operators != null and filter.operators.length != 0 ">
+          and operator in
+          <foreach collection="filter.operators" index="index" separator="," item="actorId" open="(" close=")">
+            #{actorId,jdbcType=VARCHAR}
+          </foreach>
+        </if>
+        <if test="filter.operateTime != null and filter.operateTime != ''">
+          and sdate &lt;= #{filter.operateTime,jdbcType=VARCHAR} and edate &gt;= #{filter.operateTime,jdbcType=VARCHAR}
+        </if>
+        <if test="(filter.orderBy != null and filter.orderNo != '') and (filter.order) != null and filter.order != ''">
+          order by sdate desc
+        </if>
+      </if>
+
+    </where>
+    </select>
 </mapper>

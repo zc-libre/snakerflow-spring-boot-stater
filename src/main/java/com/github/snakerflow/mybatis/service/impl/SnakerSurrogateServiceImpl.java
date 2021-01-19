@@ -9,6 +9,7 @@ import com.github.snakerflow.mybatis.entity.SurrogateEntity;
 import com.github.snakerflow.mybatis.service.SnakerSurrogateService;
 import com.github.snakerflow.util.MpPage;
 import lombok.extern.slf4j.Slf4j;
+import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Surrogate;
 
 import java.util.List;
@@ -25,7 +26,13 @@ public class SnakerSurrogateServiceImpl extends ServiceImpl<SurrogateMapper, Sur
     }
 
     @Override
-    public List<Surrogate> findOne(MpPage mpPage, Wrapper<SurrogateEntity> wrapper) {
-        return baseMapper.findOne(mpPage, wrapper);
+    public List<Surrogate> getSurrogates(QueryFilter filter) {
+        return baseMapper.findList(filter);
     }
+
+    @Override
+    public MpPage<Surrogate> getSurrogates(MpPage<Surrogate> mpPage, QueryFilter filter) {
+        return baseMapper.findList(mpPage, filter);
+    }
+
 }

@@ -293,19 +293,14 @@ public class MybatisPlusAccess implements DBAccess {
 
     @Override
     public List<Surrogate> getSurrogate(Page<Surrogate> page, QueryFilter filter) {
-        MpPage<Surrogate> mpPage = entityConvert.toSurrogateMpPage(page);
-
-        LambdaQueryWrapper<SurrogateEntity> wrapper = Wrappers.<SurrogateEntity>lambdaQuery()
-                .in(ArrayUtils.isNotEmpty(filter.getNames()), SurrogateEntity::getProcessName, CollUtil.toList(filter.getNames()))
-                .in(ArrayUtils.isNotEmpty(filter.getOperators()),SurrogateEntity::getOperator, CollUtil.toList(filter.getOperators()))
-                .lt(StringUtils.isNotBlank(filter.getOperateTime()), SurrogateEntity::getSdate, filter.getOperateTime())
-                .gt(StringUtils.isNotBlank(filter.getOperateTime()), SurrogateEntity::getEdate,filter.getOperateTime())
-                .orderByDesc(!filter.isOrderBySetted(), SurrogateEntity::getSdate);
-
-        return snakerSurrogateService.findOne(mpPage, wrapper);
+        if (Objects.isNull(page)) {
+            return snakerSurrogateService.getSurrogates(filter);
+        }
+        MpPage<Surrogate> mpPage = PageUtils.convertToMpPage(page);
+        mpPage = snakerSurrogateService.getSurrogates(mpPage, filter);
+        PageUtils.convertToPage(page, mpPage);
+        return mpPage.getRecords();
     }
-
-
 
 
     @Override
@@ -374,8 +369,9 @@ public class MybatisPlusAccess implements DBAccess {
             return snakerProcessService.findList(filter);
         }
         MpPage<Process> mpPage = PageUtils.convertToMpPage(page);
+        mpPage = snakerProcessService.findList(mpPage, filter);
         PageUtils.convertToPage(page, mpPage);
-        return snakerProcessService.findList(mpPage, filter);
+        return mpPage.getRecords();
     }
 
     @Override
@@ -384,8 +380,9 @@ public class MybatisPlusAccess implements DBAccess {
             return snakerOrderService.getActiveOrders(filter);
         }
         MpPage<Order> mpPage = PageUtils.convertToMpPage(page);
+        mpPage = snakerOrderService.getActiveOrders(mpPage, filter);
         PageUtils.convertToPage(page, mpPage);
-        return snakerOrderService.getActiveOrders(mpPage, filter);
+        return mpPage.getRecords();
     }
 
     @Override
