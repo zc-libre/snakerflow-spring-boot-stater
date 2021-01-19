@@ -14,12 +14,12 @@ import java.util.concurrent.ConcurrentMap;
  * @author zhao.cheng
  */
 @SuppressWarnings("all")
-public class SnakerRedisCacheManager<K, V> implements CacheManager {
+public class SnakerRedisCacheManager implements CacheManager {
 
-    private final RedisTemplate<K, V> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
     private final ConcurrentMap<String, Cache> caches;
 
-    public SnakerRedisCacheManager(RedisTemplate<K, V> redisTemplate) {
+    public SnakerRedisCacheManager(RedisTemplate<String, Object> redisTemplate) {
         this.caches = new ConcurrentHashMap<String, Cache>();
         this.redisTemplate = redisTemplate;
     }
@@ -39,7 +39,6 @@ public class SnakerRedisCacheManager<K, V> implements CacheManager {
                 cache = existing;
             }
         }
-
         return cache;
     }
 

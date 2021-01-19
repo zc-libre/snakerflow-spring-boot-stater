@@ -65,7 +65,8 @@ public class EhCache<K, V> implements Cache<K, V> {
         }
 	}
 
-	public V remove(K key) throws CacheException {
+	@Override
+    public V remove(K key) throws CacheException {
         try {
             V previous = get(key);
             cache.remove(key);
@@ -75,7 +76,8 @@ public class EhCache<K, V> implements Cache<K, V> {
         }
 	}
 
-	public void clear() throws CacheException {
+	@Override
+    public void clear() throws CacheException {
         try {
             cache.removeAll();
         } catch (Throwable t) {

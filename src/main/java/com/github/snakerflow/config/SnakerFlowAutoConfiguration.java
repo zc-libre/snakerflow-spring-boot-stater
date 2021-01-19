@@ -108,7 +108,7 @@ public class SnakerFlowAutoConfiguration {
     @ConditionalOnProperty(prefix = "snaker.flow", name = "cache-type", havingValue = "redis")
     public CacheManager redisCacheManager(RedisTemplate<String, Object> redisTemplate) {
         log.info("获取到缓存使用类型: redis");
-        return new SnakerRedisCacheManager<>(redisTemplate);
+        return new SnakerRedisCacheManager(redisTemplate);
     }
 
 
