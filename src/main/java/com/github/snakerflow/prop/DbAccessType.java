@@ -7,9 +7,9 @@ package com.github.snakerflow.prop;
 public enum DbAccessType {
 
         /**
-         * mybatis
+         * jdbc
          */
-        MYBATIS,
+        JDBC,
 
         /**
          * spring

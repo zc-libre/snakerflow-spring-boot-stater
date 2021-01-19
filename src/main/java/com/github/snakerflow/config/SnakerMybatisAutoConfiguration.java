@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author zhao.cheng
  */
-@Slf4j
+/*@Slf4j
 @Configuration
 @ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class})
 @ConditionalOnProperty(prefix = "snaker.flow", name = "db-access-type", havingValue = "mybatis", matchIfMissing = true)
@@ -39,4 +39,4 @@ public class SnakerMybatisAutoConfiguration {
     }
 
 
-}
+}*/

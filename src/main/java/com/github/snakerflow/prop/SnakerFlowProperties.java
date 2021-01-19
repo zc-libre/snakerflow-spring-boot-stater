@@ -30,7 +30,7 @@ public class SnakerFlowProperties {
     /**
      * 数据库连接类型
      */
-    private DbAccessType dbAccessType = DbAccessType.MYBATIS;
+    private DbAccessType dbAccessType;
 
     /**
      * 决策表达式类型

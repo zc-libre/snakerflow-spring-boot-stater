@@ -9,6 +9,7 @@ import com.github.snakerflow.engine.SpringSnakerEngine;
 import com.github.snakerflow.prop.SnakerFlowProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.snaker.engine.*;
+import org.snaker.engine.access.jdbc.JdbcAccess;
 import org.snaker.engine.cache.CacheManager;
 import org.snaker.engine.cache.memory.MemoryCacheManager;
 import org.snaker.engine.core.*;
@@ -41,7 +42,6 @@ import javax.sql.DataSource;
 @Configuration
 @ConditionalOnClass({DataSource.class, EmbeddedDatabaseType.class})
 @AutoConfigureAfter({DataSourceAutoConfiguration.class, RedisAutoConfiguration.class})
-@EnableConfigurationProperties({SnakerFlowProperties.class})
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class SnakerFlowAutoConfiguration {
 
@@ -95,29 +95,6 @@ public class SnakerFlowAutoConfiguration {
         return managerService;
     }
 
-    @Bean("memoryCacheManager")
-    @ConditionalOnProperty(prefix = "snaker.flow.cache", name = "cache-type", havingValue = "memory", matchIfMissing = true)
-    public CacheManager memoryCacheManager() {
-        log.info("获取到缓存使用类型: memory");
-        return new MemoryCacheManager();
-    }
-
-
-    @Bean("redisCacheManager")
-    @ConditionalOnBean(RedisTemplate.class)
-    @ConditionalOnProperty(prefix = "snaker.flow.cache", name = "cache-type", havingValue = "redis")
-    public CacheManager redisCacheManager(RedisTemplate<String, Object> redisTemplate, SnakerFlowProperties properties) {
-        log.info("获取到缓存使用类型: redis");
-        return new SnakerRedisCacheManager(redisTemplate,properties);
-    }
-
-
-    @Bean("ehCacheManager")
-    @ConditionalOnProperty(prefix = "snaker.flow.cache", name = "cache-type", havingValue = "ehcache")
-    public CacheManager ehCacheManager() {
-        log.info("获取到缓存使用类型: ehcache");
-        return new EhCacheManager();
-    }
 
     @Bean
     @ConditionalOnMissingBean
@@ -137,6 +114,14 @@ public class SnakerFlowAutoConfiguration {
         dbAccess.setDataSource(dataSource);
         dbAccess.setLobHandler(lobHandler);
         return dbAccess;
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "snaker.flow", name = "db-access-type", havingValue = "jdbc", matchIfMissing = true)
+    public DBAccess jdbcDBAccess(DataSource dataSource) {
+        JdbcAccess jdbcAccess = new JdbcAccess();
+        jdbcAccess.setDataSource(dataSource);
+        return jdbcAccess;
     }
 
     @Bean
