@@ -47,7 +47,7 @@ public interface SurrogateMapper extends BaseMapper<SurrogateEntity> {
      * @param filter /
      * @return /
      */
-  //  List<Surrogate> findList(QueryFilter filter);
+    List<Surrogate> findList(QueryFilter filter);
 
     /**
      * 分页条件查询
