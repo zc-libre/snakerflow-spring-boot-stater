@@ -43,6 +43,6 @@ snaker:
 
 ​        2.缓存使用redis模式需配置RedisTemplate<String, Objecet>  bean。
 
-原项目使用文档：https://yunmel.gitbooks.io/snakerflow/content/
+项目使用文档：https://zc-libre.github.io/snaker-doc/
 
 有问题欢迎交流，本项目对你有用的话，欢迎star。有问题请加 QQ: 504879189
