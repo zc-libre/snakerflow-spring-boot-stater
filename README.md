@@ -41,8 +41,10 @@ snaker:
 
 注：1. DBAccess使用mybatis-plus模式需配置mybatis-plus的分页插件。
 
-​        2.缓存使用redis模式需配置RedisTemplate<String, Objecet>  bean。
+​        2.缓存使用redis模式需配置RedisTemplate<String, Object>  bean。
 
 项目使用文档：https://zc-libre.github.io/snaker-doc/
+
+国内文档地址：https://zc-libre.gitee.io/snaker-doc/
 
 有问题欢迎交流，本项目对你有用的话，欢迎star。有问题请加 QQ: 504879189
