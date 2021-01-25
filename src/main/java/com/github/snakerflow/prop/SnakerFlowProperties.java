@@ -33,6 +33,11 @@ public class SnakerFlowProperties {
     private DbAccessType dbAccessType;
 
     /**
+     * 委托代理拦截器
+     */
+    private Boolean enableSurrogate = Boolean.FALSE;
+
+    /**
      * 决策表达式类型
      */
     private ExpressionType expressionType = ExpressionType.JUEL;

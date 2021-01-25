@@ -15,6 +15,7 @@ import org.snaker.engine.cache.memory.MemoryCacheManager;
 import org.snaker.engine.core.*;
 import org.snaker.engine.impl.JuelExpression;
 import org.snaker.engine.impl.LogInterceptor;
+import org.snaker.engine.impl.SurrogateInterceptor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -114,6 +115,13 @@ public class SnakerFlowAutoConfiguration {
         dbAccess.setDataSource(dataSource);
         dbAccess.setLobHandler(lobHandler);
         return dbAccess;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = "snaker.flow", name = "enable-surrogate", havingValue = "true")
+    public SurrogateInterceptor surrogateInterceptor() {
+        return new SurrogateInterceptor();
     }
 
     @Bean
