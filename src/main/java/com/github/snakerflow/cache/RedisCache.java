@@ -33,7 +33,7 @@ public class RedisCache implements Cache<String, Object> {
         Object val = null;
         try {
 
-            val = redisTemplate.opsForValue().get(properties.getCache().getKeyPrefix() + key);
+            val = redisTemplate.opsForValue().get(key);
         } catch (Throwable t) {
             throw new CacheException(t);
         }
@@ -43,7 +43,7 @@ public class RedisCache implements Cache<String, Object> {
     @Override
     public Object put(String key, Object value) throws CacheException {
         try {
-            redisTemplate.opsForValue().set(properties.getCache().getKeyPrefix() + key,
+            redisTemplate.opsForValue().set(key,
                             value,
                             properties.getCache().getTimeout(),
                             properties.getCache().getTimeUnit());
@@ -56,7 +56,7 @@ public class RedisCache implements Cache<String, Object> {
     @Override
     public Object remove(String key) throws CacheException {
         try {
-            Object val = get(properties.getCache().getKeyPrefix() + key);
+            Object val = get(key);
             if (Objects.nonNull(val)) {
                 redisTemplate.delete(key);
             }
@@ -69,7 +69,7 @@ public class RedisCache implements Cache<String, Object> {
     @Override
     public void clear() throws CacheException {
         try {
-            Set<String> keys = redisTemplate.keys(properties.getCache().getKeyPrefix() + "*");
+            Set<String> keys = redisTemplate.keys( "*");
             if (keys != null && !keys.isEmpty()) {
                 redisTemplate.delete(keys);
             }
