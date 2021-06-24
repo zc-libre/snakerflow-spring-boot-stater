@@ -6,6 +6,7 @@ import com.github.snakerflow.mybatis.service.impl.*;
 import com.github.snakerflow.mybatis.service.mapstruct.EntityConvert;
 import com.github.snakerflow.prop.SnakerFlowProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.annotation.MapperScan;
 import org.snaker.engine.DBAccess;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import javax.sql.DataSource;
 @Configuration
 @ConditionalOnProperty(prefix = "snaker.flow", name = "db-access-type", havingValue = "mybatis_plus")
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+@MapperScan("com.github.snakerflow.mybatis.mapper")
 public class SnakerMybatisPlusAutoConfiguration {
 
     @Bean
@@ -50,8 +52,6 @@ public class SnakerMybatisPlusAutoConfiguration {
         access.setEntityConvert(EntityConvert.INSTANCE);
         return access;
     }
-
-
 
 
     @Bean
