@@ -1,54 +1,48 @@
 package com.github.snakerflow.cache;
 
-import com.github.snakerflow.prop.SnakerFlowProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.snaker.engine.cache.Cache;
 import org.snaker.engine.cache.CacheException;
 import org.snaker.engine.cache.CacheManager;
-import org.snaker.engine.helper.StringHelper;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.cache.RedisCacheManager;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
-/**
- * TODO redis实现cache
- * @author zhao.cheng
- */
-@SuppressWarnings("all")
+import java.util.Collection;
+import java.util.Objects;
+
+@Slf4j
 public class SnakerRedisCacheManager implements CacheManager {
 
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final ConcurrentMap<String, Cache> caches;
-    private final SnakerFlowProperties snakerFlowProperties;
+    private final RedisCacheManager redisCacheManager;
 
-    public SnakerRedisCacheManager(RedisTemplate<String, Object> redisTemplate, SnakerFlowProperties snakerFlowProperties) {
-        this.redisTemplate = redisTemplate;
-        this.caches = new ConcurrentHashMap<>();
-        this.snakerFlowProperties = snakerFlowProperties;
+    public SnakerRedisCacheManager(RedisCacheManager redisCacheManager) {
+        log.info("获取到缓存使用类型: redis");
+        this.redisCacheManager = redisCacheManager;
     }
 
     @Override
     public <K, V> Cache<K, V> getCache(String name) throws CacheException {
-        if(StringHelper.isEmpty(name)) {
-            throw new IllegalArgumentException("Cache名称不能为空.");
+        try {
+            org.springframework.data.redis.cache.RedisCache redisCache = (org.springframework.data.redis.cache.RedisCache) redisCacheManager.getCache(name);
+            return new RedisCache<>(redisCache);
+        } catch (Exception e) {
+            throw new CacheException(e);
         }
-        Cache cache;
-        cache = caches.get(name);
 
-        if (cache == null) {
-            cache = new RedisCache(redisTemplate, snakerFlowProperties);
-            Cache existing = caches.putIfAbsent(name, cache);
-            if (existing != null) {
-                cache = existing;
-            }
-        }
-        return cache;
     }
 
     @Override
     public void destroy() throws CacheException {
-        while (!caches.isEmpty()) {
-            caches.clear();
+        try {
+            Collection<String> cacheNames = redisCacheManager.getCacheNames();
+            for (String cacheName : cacheNames) {
+                org.springframework.cache.Cache cache = redisCacheManager.getCache(cacheName);
+               if (Objects.nonNull(cache)) {
+                   cache.clear();
+               }
+            }
+        } catch (Exception e) {
+            throw new CacheException(e);
         }
     }
 }
