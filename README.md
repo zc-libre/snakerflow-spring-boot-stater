@@ -20,7 +20,7 @@ Snaker是一个基于Java的轻量级工作流引擎，适用于企业应用中�
     <dependency>
             <groupId>com.github.zc-libre</groupId>
             <artifactId>snakerflow-spring-boot-stater</artifactId>
-            <version>2.0.5</version>
+            <version>2.0.6</version>
     </dependency>
 ```
 
