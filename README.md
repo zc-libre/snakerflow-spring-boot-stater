@@ -53,7 +53,7 @@ spring:
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 ```
-项目使用文档：https://zc-libre.github.io/snaker-doc/
+项目使用文档：http://www.zclibre.com
 
 国内文档地址：https://zc-libre.gitee.io/snaker-doc/
 
